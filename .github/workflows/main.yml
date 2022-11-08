@@ -10,14 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      -uses: actions/checkout@v3
-      -name: Use Node.js
+      - uses: actions/checkout@v3
+      - name: Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 14
       
-      -name: Instalação das dependências
+      - name: Instalação das dependências
         run: npm ci
 
-      -name: Rodando ESlint
+      - name: Rodando ESlint
         run: npm run lint
