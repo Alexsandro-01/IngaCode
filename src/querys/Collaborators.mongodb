@@ -1,0 +1,36 @@
+const database = 'ingacode';
+
+use(database);
+
+db.Collaborators.insertMany(
+  [
+    {
+      _id: "8405f29d-f423-4a84-bf27-8f1eae3b324d",
+      Name: "Verônica Vilar",
+      CreatedAt: '2022-11-08T14:04:08.002Z',
+      UpdatedAt: '2022-11-08T14:04:08.002Z',
+      DeletedAt: null
+    },
+    {
+      _id: "82b465c6-c3f2-41fd-ac40-a48a299ba3bf",
+      Name: "Malena Medeiros",
+      CreatedAt: '2022-11-08T14:10:42.447Z',
+      UpdatedAt: '2022-11-08T14:10:42.447Z',
+      DeletedAt: null
+    },
+    {
+      _id: "2ce5d402-64fc-45f4-a735-37005af46ef5",
+      Name: "Laerte Mendes",
+      CreatedAt: '2022-11-08T14:13:53.197Z',
+      UpdatedAt: '2022-11-08T14:13:53.197Z',
+      DeletedAt: null
+    },
+    {
+      _id: "652a669f-94b8-4f4c-9683-e7912b94ffde",
+      Name: "Rodrigo Salles",
+      CreatedAt: '2022-11-08T14:16:37.463Z',
+      UpdatedAt: '2022-11-08T14:16:37.463Z',
+      DeletedAt: null
+    },
+  ]
+)
