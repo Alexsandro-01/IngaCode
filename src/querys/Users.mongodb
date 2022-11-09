@@ -1,0 +1,39 @@
+
+const database = 'ingacode';
+use(database);
+
+
+db.Users.insertMany([
+  {
+    _id: "8405f29d-f423-4a84-bf27-8f1eae3b324d",
+    UserName: 'Ver_purple', //"Verônica Vilar",
+    Password: "$2b$06$NTeuoGf6MpAtpILTHrp1XOQjIvjN0VRarlCz8CKWj8ZlxfK3H6u4y", // '816VerLar'
+    CreatedAt: '2022-11-08T14:04:08.002Z',
+    UpdatedAt: '2022-11-08T14:04:08.002Z',
+    DeletedAt: null
+  },
+  {
+    _id: "82b465c6-c3f2-41fd-ac40-a48a299ba3bf",
+    UserName: 'BladeofMiquella', // "Malena Medeiros",
+    Password: "$2b$06$PWU8tlcJVNEcE9pqFigkpeTxex8EL57T2a7tbYoNQ2pK61buR8H82", // 'Ma569&ros'
+    CreatedAt: '2022-11-08T14:10:42.447Z',
+    UpdatedAt: '2022-11-08T14:10:42.447Z',
+    DeletedAt: null
+  },
+  {
+    _id: "2ce5d402-64fc-45f4-a735-37005af46ef5",
+    UserName: '1_laerte', //"Laerte Mendes",
+    Password: "$2b$06$zt3kt4zO.z/JszLfdk.VseJjw2KbDV8NdncmbW87D7JLL208vjdaq", // '&men78#'
+    CreatedAt: '2022-11-08T14:13:53.197Z',
+    UpdatedAt: '2022-11-08T14:13:53.197Z',
+    DeletedAt: null
+  },
+  {
+    _id: "652a669f-94b8-4f4c-9683-e7912b94ffde",
+    UserName: 'Rods__', // "Rodrigo Salles",
+    Password: "$2b$06$ThxE1GjrQj5.xcxyV/OD.ufJvdd9VqUID5ORmAWxNm9ViOJCxoIx.", // 'carrosSaoComoAslanchas'
+    CreatedAt: '2022-11-08T14:16:37.463Z',
+    UpdatedAt: '2022-11-08T14:16:37.463Z',
+    DeletedAt: null
+  },
+]);
