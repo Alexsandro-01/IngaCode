@@ -2,6 +2,7 @@ const express = require('express');
 require('express-async-errors');
 
 const loginRoute = require('./routes/Login.routes');
+const projectRoute = require('./routes/Project.routes');
 const ErrorMiddleware = require('./middlewares/ErrorMiddleware');
 
 const app = express();
@@ -13,6 +14,7 @@ app.get('/', async (req, res) => {
 });
 
 app.use('/login', loginRoute);
+app.use('/projects', projectRoute);
 
 app.use(ErrorMiddleware);
 
