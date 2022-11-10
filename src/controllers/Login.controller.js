@@ -1,6 +1,6 @@
 const loginService = require('../services/Login.service');
 
-/** @type {import('express').RequestHandler */
+/** @type {import('express').RequestHandler} */
 async function loginController(req, res) {
   const userData = req.body;
 
