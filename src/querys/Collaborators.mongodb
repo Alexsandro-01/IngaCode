@@ -2,7 +2,7 @@ const database = 'ingacode';
 
 use(database);
 
-db.Collaborators.insertMany(
+db.collaborators.insertMany(
   [
     {
       _id: "8405f29d-f423-4a84-bf27-8f1eae3b324d",
