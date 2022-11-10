@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 const zod = require('zod');
 const bcrypt = require('bcrypt');
+const Errors = require('../errors/Errors');
 
 const loginSchema = zod.object({
   UserName: zod
@@ -19,10 +20,12 @@ const loginSchema = zod.object({
   .max(255, { message: 'UserName must be 255 or less characters long' }),
 });
 
-function checkPassword(plaintextPassword, hashPassword) {
-  const isValid = bcrypt.compareSync(plaintextPassword, hashPassword);
+async function checkPassword(plaintextPassword, hashPassword) {
+  const isValid = await bcrypt.compare(plaintextPassword, hashPassword);
 
-  return isValid;
+  if (!isValid) {
+    Errors.BadRequest();
+  }
 }
 
 module.exports = {
