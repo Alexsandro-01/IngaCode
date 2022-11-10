@@ -3,14 +3,14 @@ const { ZodError } = require('zod');
 /** @type {import('express').RequestHandler} */
 async function ErrorMiddleware(error, _req, res, _next) {
   const statusCode = {
-    ValidationError: 400,
-    UnauthorizedError: 401, 
-    NotExistError: 404,
-    ConflictError: 409,  
+    BadRequest: 400,
+    Unauthorized: 401, 
+    NotFound: 404,
+    Conflict: 409,  
   };
 
   if (error instanceof ZodError) {
-    return res.status(statusCode.ValidationError).json({ message: error.issues[0].message });
+    return res.status(statusCode.BadRequest).json({ message: error.issues[0].message });
   }
 
   if (!statusCode[error.name]) {
