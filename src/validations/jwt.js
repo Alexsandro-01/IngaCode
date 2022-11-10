@@ -12,7 +12,7 @@ async function createTokenJwt(payload) {
 }
 
 async function veryfyTokenJwt(token) {
-  const secret = fs.readFile(key, 'utf-8');
+  const secret = await fs.readFile(key, 'utf-8');
 
   try {
     const data = jwt.verify(token, secret);
