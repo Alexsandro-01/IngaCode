@@ -16,6 +16,12 @@ function Conflict(message) {
   throw error;
 }
 
+function NotFound(message) {
+  const error = new Error(message);
+  error.name = 'NotFound';
+  throw error;
+}
+
 function InternalServerError() {
   throw new Error(
     'Sorry for the inconvenience, but the service is unavailable. Please try again later.',
@@ -26,5 +32,6 @@ module.exports = {
   BadRequest,
   Unauthorized,
   Conflict,
+  NotFound,
   InternalServerError,
 };
