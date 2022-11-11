@@ -4,32 +4,16 @@ const jwt = require('../validations/jwt');
 const Errors = require('../errors/Errors');
 const getUserOnDB = require('./getUserOnDB');
 const ProjectModel = require('../models/Projects.model');
-
-async function existsProject(payload) {
-  try {
-    const project = await ProjectModel.findOne({
-      $and: [
-        { Name: payload.Name },
-        { DeletedAt: null },
-      ],
-    });
-
-    return project;
-  } catch (error) {
-    Errors.InternalServerError();
-  }
-}
+const existsProject = require('./existsProject');
 
 async function createNewProjectOnDB(payload) {
   try {
-    const project = await ProjectModel.create({
+    await ProjectModel.create({
       _id: uuidv4(),
       Name: payload.Name,
       CreatedAt: new Date(),
       UpdatedAt: new Date(),
     });
-    
-    return project;
   } catch (error) {
     Errors.InternalServerError();
   }
@@ -54,8 +38,7 @@ async function projectService(payload, token) {
     Errors.Conflict('This Project name allread exists');
   }
 
-  const newProject = await createNewProjectOnDB(parsedProject.data);
-  return newProject;
+  await createNewProjectOnDB(parsedProject.data);
 }
 
 module.exports = projectService;
