@@ -5,10 +5,16 @@ const TimeTrackerSchema = new Schema(
 {
   _id: String,
   StartDate: Date,
-  EndDate: Date,
+  EndDate: {
+    type: Date,
+    default: null,
+  },
   TimeZoneId: String,
   TaskId: String,
-  CollaboratorId: String,
+  CollaboratorId: {
+    type: String,
+    default: null,
+  },
   CreatedAt: Date,
   UpdatedAt: Date,
   DeletedAt: {
