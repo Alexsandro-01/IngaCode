@@ -132,9 +132,13 @@ async function validDates(payload) {
       Errors.BadRequest(`${keys[index]} must be a valid Date`);
     }
   });
+
+  return parsedTimeTracker;
 }
 
 module.exports = {
   checkTimetrackers,
   validDates,
+  calcTotalTimeDay,
+  timeToCalcByDay,
 };

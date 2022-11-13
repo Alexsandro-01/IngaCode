@@ -5,7 +5,22 @@ const getUserOnDB = require('./getUserOnDB');
 const TimeTrackerModel = require('../models/TimeTrackers.model');
 const existsTaskById = require('./existsTaskById');
 const getCollaboratorById = require('./getCollaboratorById');
-const { checkTimetrackers, validDates } = require('./timeTrackerhelpers');
+const { 
+  checkTimetrackers,
+  validDates,
+  calcTotalTimeDay,
+  timeToCalcByDay,
+} = require('./timeTrackerhelpers');
+const updateTimeTrackerSchema = require('../validations/updateTimeTracker');
+
+async function authUser(token) {
+  const userData = await jwt.veryfyTokenJwt(token);
+  const user = await getUserOnDB(userData);
+
+  if (!user) {
+    Errors.BadRequest();
+  }
+}
 
 async function createNewTimeTrackerOnDB(payload) {
   try {
@@ -20,8 +35,33 @@ async function createNewTimeTrackerOnDB(payload) {
   }
 }
 
+async function getAllTimeTrackersOnDB() {
+  const timeTrackers = await TimeTrackerModel.find({
+    where: { DeletedAt: null },
+  });
+
+  return timeTrackers;
+}
+
+async function getTimetrackerById(_id) {
+  const timeTracker = await TimeTrackerModel.findById(_id);
+  return timeTracker;
+}
+
+async function updateTimeTrackerById(payload, _id) {
+  const response = await TimeTrackerModel.findOneAndUpdate(
+    { _id },
+    {
+      ...payload,
+      UpdatedAt: new Date().toJSON(),
+    },
+  );
+
+  return response;
+}
+
 async function createTimeTrackerService(payload, token) {
-  await validDates(payload);
+  const parsedTimeTracker = await validDates(payload);
 
   const userData = await jwt.veryfyTokenJwt(token);
   const user = await getUserOnDB(userData);
@@ -42,7 +82,59 @@ async function createTimeTrackerService(payload, token) {
 
   await checkTimetrackers([payload.StartDate, payload.EndDate]);
 
-  await createNewTimeTrackerOnDB(payload);
+  await createNewTimeTrackerOnDB(parsedTimeTracker.data);
 }
 
-module.exports = createTimeTrackerService;
+async function getTimeToday() {
+  const trackers = await getAllTimeTrackersOnDB();
+  const today = new Date().toJSON();
+  const timeToCalc = timeToCalcByDay(trackers, [], today);
+  const totalTime = calcTotalTimeDay(timeToCalc);
+
+  console.log(totalTime);
+}
+
+function validPayloadUpdateTimeTracker(payload) {
+  if (
+    !Object.prototype.hasOwnProperty.call(payload, 'EndDate')
+    && !Object.prototype.hasOwnProperty.call(payload, 'CollaboratorId') 
+  ) {
+    Errors.BadRequest('EndDate or CollaboratorId is required');
+  }
+
+  const parsedTimeTracker = updateTimeTrackerSchema.safeParse(payload);
+
+  if (!parsedTimeTracker.success) {
+    throw parsedTimeTracker.error;
+  }
+
+  return parsedTimeTracker;
+}
+
+async function updateTimeTrackerService(payload, timeTrackerId, token) {
+  await authUser(token);
+  
+  const { data } = validPayloadUpdateTimeTracker(payload);
+
+  const timeTracker = await getTimetrackerById(timeTrackerId);
+  if (!timeTracker) {
+    Errors.NotFound('TimeTracker not found');
+  }
+
+  // eslint-disable-next-line no-restricted-globals
+  if (data.EndDate !== undefined && isNaN(Date.parse(data.EndDate))) {
+    Errors.BadRequest(`${data.EndDate} must be a valid Date`);
+  }
+
+  if (!getCollaboratorById(payload.CollaboratorId)) {
+    Errors.NotFound('Collaborator not found');
+  }
+
+  await updateTimeTrackerById(data, timeTrackerId);
+}
+
+module.exports = {
+  createTimeTrackerService,
+  updateTimeTrackerService,
+  getTimeToday,
+};
