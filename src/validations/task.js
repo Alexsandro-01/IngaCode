@@ -6,7 +6,8 @@ const taskSchema = zod.object({
   .string({
     required_error: 'Name is required',
     invalid_type_error: 'Name must be a string',
-  }),
+  })
+  .min(3, { message: 'Name must be 3 or more characters long' }),
   Description: zod
   .string({
     required_error: 'Description is required',
