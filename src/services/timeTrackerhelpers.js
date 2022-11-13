@@ -43,7 +43,7 @@ function calcTimeInterval(startDate, endDate) {
   return result;
 }
 
-function calcTotalTimeDay(timeDayList) {
+function calcTotalTime(timeDayList) {
   let h = 0;
   let m = 0;
   let s = 0;
@@ -72,8 +72,32 @@ function filterByDay(trackers, insertStartDate) {
   return filteredDates;
 }
 
+function filterByMonth(trackers) {
+  const filteredDates = trackers.filter((tracker) => {
+    const monthToFilter = new Date().toJSON().slice(5, 7);
+    const date = new Date(tracker.StartDate).toJSON().slice(5, 7);
+
+    return date === monthToFilter;
+  });
+  return filteredDates;
+}
+
 function timeToCalcByDay(trackers, timeDayList, insertStartDate) {
   const filteredDates = filterByDay(trackers, insertStartDate);
+  filteredDates.forEach((value) => {
+    const now = new Date().toJSON();
+
+    const valueEndDate = !value.EndDate ? now : value.EndDate.toJSON();
+    const valueStatDate = value.StartDate.toJSON();
+
+    timeDayList.push(calcTimeInterval(valueStatDate, valueEndDate));
+  });
+
+  return timeDayList;
+}
+
+function timeToCalcByMonth(trackers, timeDayList) {
+  const filteredDates = filterByMonth(trackers);
   filteredDates.forEach((value) => {
     const now = new Date().toJSON();
 
@@ -96,7 +120,7 @@ async function checkTimetrackers(insertDate) {
 
   const timeToCalc = timeToCalcByDay(trackers, timeDayList, insertStartDate);
 
-  const totalTime = calcTotalTimeDay(timeToCalc);
+  const totalTime = calcTotalTime(timeToCalc);
 
   if (totalTime.hours >= 24) {
     Errors.BadRequest(
@@ -139,6 +163,7 @@ async function validDates(payload) {
 module.exports = {
   checkTimetrackers,
   validDates,
-  calcTotalTimeDay,
+  calcTotalTime,
   timeToCalcByDay,
+  timeToCalcByMonth,
 };
