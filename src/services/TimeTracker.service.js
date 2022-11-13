@@ -36,28 +36,47 @@ async function createNewTimeTrackerOnDB(payload) {
 }
 
 async function getAllTimeTrackersOnDB() {
-  const timeTrackers = await TimeTrackerModel.find({
-    where: { DeletedAt: null },
-  });
-
-  return timeTrackers;
+  try {
+    const timeTrackers = await TimeTrackerModel.find({
+      where: { DeletedAt: null },
+    });
+  
+    return timeTrackers;
+  } catch (error) {
+    Errors.InternalServerError();    
+  }
 }
 
 async function getTimetrackerById(_id) {
-  const timeTracker = await TimeTrackerModel.findById(_id);
-  return timeTracker;
+  try {
+    const timeTracker = await TimeTrackerModel.findOne(
+      {
+        $and: [
+          { _id },
+          { DeletedAt: null },
+        ],
+      },
+    );
+    return timeTracker;
+  } catch (error) {
+    Errors.InternalServerError();
+  }
 }
 
 async function updateTimeTrackerById(payload, _id) {
-  const response = await TimeTrackerModel.findOneAndUpdate(
-    { _id },
-    {
-      ...payload,
-      UpdatedAt: new Date().toJSON(),
-    },
-  );
-
-  return response;
+  try {
+    const response = await TimeTrackerModel.findOneAndUpdate(
+      { _id },
+      {
+        ...payload,
+        UpdatedAt: new Date().toJSON(),
+      },
+    );
+  
+    return response;
+  } catch (error) {
+    Errors.InternalServerError();
+  }
 }
 
 async function createTimeTrackerService(payload, token) {
