@@ -6,7 +6,7 @@ async function loginController(req, res) {
 
   const response = await loginService(userData);
 
-  res.status(200).json(response);
+  res.status(200).json({ token: response });
 }
 
 module.exports = loginController;
