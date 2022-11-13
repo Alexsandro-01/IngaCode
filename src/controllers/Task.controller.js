@@ -1,6 +1,7 @@
 const { 
   createTaskService,
   updateTaskService,
+  getTasksService,
  } = require('../services/Task.service');
 
 /** @type {import('express').RequestHandler} */
@@ -23,7 +24,17 @@ async function updateTaskController(req, res) {
   res.sendStatus(200);
 }
 
+/** @type {import('express').RequestHandler} */
+async function getTasksController(req, res) {
+  const token = req.headers.authorization;
+
+  const response = await getTasksService(token);
+
+  res.status(200).json(response);
+}
+
 module.exports = {
   createTaskController,
   updateTaskController,
+  getTasksController,
 };

@@ -28,9 +28,16 @@ async function createNewTimeTrackerOnDB(payload) {
 
 async function getAllTimeTrackersOnDB() {
   try {
-    const timeTrackers = await TimeTrackerModel.find({
+    const timeTrackers = await TimeTrackerModel.find(
+    {
       where: { DeletedAt: null },
-    });
+    },
+    {
+      DeletedAt: 0,
+      UpdatedAt: 0,
+      CreatedAt: 0,
+    },
+);
   
     return timeTrackers;
   } catch (error) {
@@ -151,4 +158,5 @@ module.exports = {
   updateTimeTrackerService,
   getTimeToday,
   getTimeMonth,
+  getAllTimeTrackersOnDB,
 };
