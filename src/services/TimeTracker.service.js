@@ -6,8 +6,9 @@ const getCollaboratorById = require('./getCollaboratorById');
 const { 
   checkTimetrackers,
   validDates,
-  calcTotalTimeDay,
+  calcTotalTime,
   timeToCalcByDay,
+  timeToCalcByMonth,
 } = require('./timeTrackerhelpers');
 const updateTimeTrackerSchema = require('../validations/updateTimeTracker');
 const authUser = require('./authUserByToken');
@@ -93,9 +94,17 @@ async function getTimeToday() {
   const trackers = await getAllTimeTrackersOnDB();
   const today = new Date().toJSON();
   const timeToCalc = timeToCalcByDay(trackers, [], today);
-  const totalTime = calcTotalTimeDay(timeToCalc);
+  const totalTime = calcTotalTime(timeToCalc);
 
-  console.log(totalTime);
+  return totalTime;
+}
+
+async function getTimeMonth() {
+  const trackers = await getAllTimeTrackersOnDB();
+  const timeToCalc = timeToCalcByMonth(trackers, []);
+  const totalTime = calcTotalTime(timeToCalc);
+
+  return totalTime;
 }
 
 function validPayloadUpdateTimeTracker(payload) {
@@ -141,4 +150,5 @@ module.exports = {
   createTimeTrackerService,
   updateTimeTrackerService,
   getTimeToday,
+  getTimeMonth,
 };
