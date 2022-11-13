@@ -1,7 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
-const jwt = require('../validations/jwt');
 const Errors = require('../errors/Errors');
-const getUserOnDB = require('./getUserOnDB');
 const TimeTrackerModel = require('../models/TimeTrackers.model');
 const existsTaskById = require('./existsTaskById');
 const getCollaboratorById = require('./getCollaboratorById');
@@ -12,15 +10,7 @@ const {
   timeToCalcByDay,
 } = require('./timeTrackerhelpers');
 const updateTimeTrackerSchema = require('../validations/updateTimeTracker');
-
-async function authUser(token) {
-  const userData = await jwt.veryfyTokenJwt(token);
-  const user = await getUserOnDB(userData);
-
-  if (!user) {
-    Errors.BadRequest();
-  }
-}
+const authUser = require('./authUserByToken');
 
 async function createNewTimeTrackerOnDB(payload) {
   try {
@@ -82,12 +72,7 @@ async function updateTimeTrackerById(payload, _id) {
 async function createTimeTrackerService(payload, token) {
   const parsedTimeTracker = await validDates(payload);
 
-  const userData = await jwt.veryfyTokenJwt(token);
-  const user = await getUserOnDB(userData);
-
-  if (!user) {
-    Errors.BadRequest();
-  }
+  await authUser(token);
 
   if (payload.CollaboratorId) {
     const collaborator = await getCollaboratorById(payload.CollaboratorId);
