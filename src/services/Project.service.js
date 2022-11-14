@@ -3,7 +3,11 @@ const projectSchema = require('../validations/project');
 const Errors = require('../errors/Errors');
 const ProjectModel = require('../models/Projects.model');
 const existsProject = require('./existsProject');
+const existsProjectById = require('./existsprojectById');
 const authUser = require('./authUserByToken');
+const deleteTasksByProjectId = require('./deleteTasksByProjectId');
+const getTasksByProjectId = require('./getTasksByProjectId');
+const deleteTimeTrackersByTaskId = require('./deleteTimeTrackersByTaskId');
 
 async function createNewProjectOnDB(payload) {
   try {
@@ -38,6 +42,18 @@ async function updateProjectById(payload, _id) {
         UpdatedAt: new Date().toJSON(),
       },
     );
+  } catch (error) {
+    Errors.InternalServerError();
+  }
+}
+
+async function deleteProjectById(_id) {
+  try {
+    const response = await ProjectModel.findOneAndUpdate(
+      { _id },
+      { DeletedAt: new Date().toJSON() },
+    );
+    return response;
   } catch (error) {
     Errors.InternalServerError();
   }
@@ -78,7 +94,30 @@ async function updateProjectService(payload, projectId, token) {
   await updateProjectById(parsedProject.data, projectId);
 }
 
+async function deleteProjectService(projectId, token) {
+  await authUser(token);
+
+  const exist = await existsProjectById({ ProjectId: projectId });
+  
+  if (!exist) {
+    Errors.NotFound('Project not found');
+  }
+
+  await deleteProjectById(projectId);
+
+  const tasksByproject = await getTasksByProjectId(projectId);
+
+  Promise.all(
+    tasksByproject.map((task) => 
+      // eslint-disable-next-line no-underscore-dangle
+       deleteTimeTrackersByTaskId(task._id)),
+  );
+
+  await deleteTasksByProjectId(projectId);
+}
+
 module.exports = {
   createProjectService,
   updateProjectService,
+  deleteProjectService,
 };
