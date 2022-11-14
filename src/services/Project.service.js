@@ -18,7 +18,32 @@ async function createNewProjectOnDB(payload) {
   }
 }
 
-async function projectService(payload, token) {
+async function getProjectById(_id) {
+  try {
+    const response = await ProjectModel.findOne({
+      _id,
+    });
+    return response;
+  } catch (error) {
+    Errors.InternalServerError();
+  }
+}
+
+async function updateProjectById(payload, _id) {
+  try {
+    await ProjectModel.findOneAndUpdate(
+      { _id },
+      {
+        ...payload,
+        UpdatedAt: new Date().toJSON(),
+      },
+    );
+  } catch (error) {
+    Errors.InternalServerError();
+  }
+}
+
+async function createProjectService(payload, token) {
   const parsedProject = projectSchema.safeParse(payload);
 
   if (!parsedProject.success) {
@@ -36,4 +61,24 @@ async function projectService(payload, token) {
   await createNewProjectOnDB(parsedProject.data);
 }
 
-module.exports = projectService;
+async function updateProjectService(payload, projectId, token) {
+  await authUser(token);
+
+  const parsedProject = projectSchema.safeParse(payload);
+
+  if (!parsedProject.success) {
+    throw parsedProject.error;
+  }
+
+  const project = await getProjectById(projectId);
+  if (!project) {
+    Errors.NotFound('Project not found');
+  }
+
+  await updateProjectById(parsedProject.data, projectId);
+}
+
+module.exports = {
+  createProjectService,
+  updateProjectService,
+};
