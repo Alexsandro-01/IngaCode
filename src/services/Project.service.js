@@ -8,6 +8,7 @@ const authUser = require('./authUserByToken');
 const deleteTasksByProjectId = require('./deleteTasksByProjectId');
 const getTasksByProjectId = require('./getTasksByProjectId');
 const deleteTimeTrackersByTaskId = require('./deleteTimeTrackersByTaskId');
+const getAllProjectsOnDB = require('./getAllProjectsOnDB');
 
 async function createNewProjectOnDB(payload) {
   try {
@@ -77,6 +78,14 @@ async function createProjectService(payload, token) {
   await createNewProjectOnDB(parsedProject.data);
 }
 
+async function getProjectsService(token) {
+  await authUser(token);
+
+  const projects = await getAllProjectsOnDB();
+
+  return projects;
+}
+
 async function updateProjectService(payload, projectId, token) {
   await authUser(token);
 
@@ -120,4 +129,5 @@ module.exports = {
   createProjectService,
   updateProjectService,
   deleteProjectService,
+  getProjectsService,
 };
