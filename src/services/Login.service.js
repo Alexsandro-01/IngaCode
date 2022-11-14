@@ -1,7 +1,7 @@
 const { loginSchema, checkPassword } = require('../validations/login');
 const Errors = require('../errors/Errors');
 const jwt = require('../validations/jwt');
-const getUserOnDB = require('./getUserOnDB');
+const UserModel = require('../models/Users.model');
   
   async function loginService(payload) {
     const parsedLoginData = loginSchema.safeParse(payload);
@@ -10,7 +10,7 @@ const getUserOnDB = require('./getUserOnDB');
       throw parsedLoginData.error;
     }
 
-    const user = await getUserOnDB(payload);
+    const user = await UserModel.getUserByName(parsedLoginData.data);
 
     if (!user) {
       Errors.BadRequest();

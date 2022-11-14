@@ -1,67 +1,15 @@
 /* eslint-disable no-underscore-dangle */
-const { v4: uuidv4 } = require('uuid');
 const taskSchema = require('../validations/task');
 const updateTaskSchema = require('../validations/updateTask');
 const jwt = require('../validations/jwt');
 const Errors = require('../errors/Errors');
-const getUserOnDB = require('./getUserOnDB');
-const TaskModel = require('../models/Tasks.model');
-const existsProjectById = require('./existsprojectById');
 const authUser = require('./authUserByToken');
-const getTaskById = require('./getTaskById');
-const { getAllTimeTrackersOnDB } = require('./TimeTracker.service');
-const getAllCollaboratorsOnDB = require('./getAllCollaboratorsOnDB');
-const getAllProjectsOnDB = require('./getAllProjectsOnDB');
-const deleteTaskById = require('./deleteTaskById');
-const timeTrackersByTaskId = require('./timeTrackersByTaskId');
-const deleteTimeTrackersByTaskId = require('./deleteTimeTrackersByTaskId');
 
-async function createNewTaskOnDB(payload) {
-  try {
-    await TaskModel.create({
-      _id: uuidv4(),
-      Name: payload.Name,
-      Description: payload.Description,
-      ProjectId: payload.ProjectId,
-      CreatedAt: new Date(),
-      UpdatedAt: new Date(),
-    });
-  } catch (error) {
-    Errors.InternalServerError();
-  }
-}
-
-async function updateTaskById(payload, _id) {
-  try {
-    await TaskModel.findOneAndUpdate(
-      { _id },
-      {
-        ...payload,
-        UpdatedAt: new Date().toJSON(),
-      },
-    );
-  } catch (error) {
-    Errors.InternalServerError();
-  }
-}
-
-async function getAlltasksOnDB() {
-  try {
-    const response = await TaskModel.find(
-    {
-      DeletedAt: null,
-    },
-    {
-      DeletedAt: 0,
-      CreatedAt: 0,
-      UpdatedAt: 0,
-    },
-);
-    return response;
-  } catch (error) {
-    Errors.InternalServerError();
-  }
-}
+const TaskModel = require('../models/Tasks.model');
+const UserModel = require('../models/Users.model');
+const CollaboratorModel = require('../models/Collaborators.model');
+const ProjectModel = require('../models/Projects.model');
+const TimeTrackerModel = require('../models/TimeTrackers.model');
 
 async function createTaskService(payload, token) {
   const parsedTask = taskSchema.safeParse(payload);
@@ -71,18 +19,18 @@ async function createTaskService(payload, token) {
   }
 
   const userData = await jwt.veryfyTokenJwt(token);
-  const user = await getUserOnDB(userData);
+  const user = await UserModel.getUserByName(userData);
 
   if (!user) {
     Errors.BadRequest();
   }
 
-  const exists = await existsProjectById(parsedTask.data);
+  const exists = await ProjectModel.getProjectById(parsedTask.data);
   if (!exists) {
     Errors.NotFound('The informed Project don\'t exists');
   }
 
-  await createNewTaskOnDB(parsedTask.data);
+  await TaskModel.createNewTask(parsedTask.data);
 }
 
 function validPayloadUpdateTask(payload) {
@@ -107,12 +55,12 @@ async function updateTaskService(payload, taskId, token) {
 
   const parsedTask = validPayloadUpdateTask(payload);
 
-  const task = await getTaskById(taskId);
+  const task = await TaskModel.getTaskById(taskId);
   if (!task) {
     Errors.NotFound('Task not found');
   }
 
-  await updateTaskById(parsedTask.data, taskId);
+  await TaskModel.updateTaskById(parsedTask.data, taskId);
 }
 
 function joinTables(trackers, tasks, collaborators, projects) {
@@ -141,10 +89,10 @@ function joinTables(trackers, tasks, collaborators, projects) {
 async function getTasksService(token) {
   await authUser(token);
 
-  const trackers = await getAllTimeTrackersOnDB();
-  const tasks = await getAlltasksOnDB();
-  const collaborators = await getAllCollaboratorsOnDB();
-  const projects = await getAllProjectsOnDB();
+  const trackers = await TimeTrackerModel.getAllTimeTrackers();
+  const tasks = await TaskModel.getAlltasks();
+  const collaborators = await CollaboratorModel.getAllCollaborators();
+  const projects = await ProjectModel.getAllProjects();
   
   const response = joinTables(trackers, tasks, collaborators, projects);
 
@@ -154,16 +102,16 @@ async function getTasksService(token) {
 async function deleteTaskService(taskId, token) {
   await authUser(token);
 
-  const deleted = await deleteTaskById(taskId);
+  const deleted = await TaskModel.deleteTaskById(taskId);
 
   if (!deleted) {
     Errors.NotFound('Task not found');
   }
 
-  const timeTrackersByTask = await timeTrackersByTaskId(taskId);
+  const timeTrackersByTask = await TimeTrackerModel.getTimeTrackersByTaskId(taskId);
 
   if (timeTrackersByTask.length > 0) {
-    await deleteTimeTrackersByTaskId(taskId);
+    await TimeTrackerModel.deleteTimeTrackersByTaskId(taskId);
   }
 }
 

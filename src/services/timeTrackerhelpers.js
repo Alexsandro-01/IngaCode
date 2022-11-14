@@ -2,17 +2,6 @@ const Errors = require('../errors/Errors');
 const timeTrackerSchema = require('../validations/timeTracker');
 const TimeTrackerModel = require('../models/TimeTrackers.model');
 
-async function getTimetrackers() {
-  try {
-    const response = await TimeTrackerModel.find({
-      DeletedAt: null,
-    });
-    return response;
-  } catch (error) {
-    Errors.InternalServerError();
-  }
-}
-
 function helperCheckTimetrackers(
   valueStatDate,
   valueEndDate,
@@ -108,7 +97,7 @@ function timeToCalcByMonth(trackers, timeDayList) {
 }
 
 async function checkTimetrackers(insertDate) {
-  const trackers = await getTimetrackers();
+  const trackers = await TimeTrackerModel.getAllTimeTrackers();
   const timeDayList = [];
 
   const insertStartDate = insertDate[0];
