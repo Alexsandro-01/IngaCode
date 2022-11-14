@@ -1,5 +1,6 @@
 const { Schema } = require('mongoose');
 const db = require('./connection');
+const Errors = require('../errors/Errors');
 
 const CollaboratorSchema = new Schema(
 {
@@ -19,4 +20,34 @@ const CollaboratorSchema = new Schema(
 
 const CollaboratorModel = db.model('Collaborators', CollaboratorSchema);
 
-module.exports = CollaboratorModel;
+async function getAllCollaborators() {
+  try {
+    const collaborators = await CollaboratorModel.find({
+      DeletedAt: null,
+    });
+
+    return collaborators;
+  } catch (error) {
+    Errors.InternalServerError();
+  }
+}
+
+async function getCollaboratorById(id) {
+  try {
+    const user = await CollaboratorModel.findOne({
+      $and: [
+        { _id: id },
+        { DeletedAt: null },
+      ],
+    });
+
+    return user;
+  } catch (error) {
+    Errors.InternalServerError();
+  }
+}
+
+module.exports = {
+  getAllCollaborators,
+  getCollaboratorById,
+};
