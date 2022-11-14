@@ -13,6 +13,8 @@ const { getAllTimeTrackersOnDB } = require('./TimeTracker.service');
 const getAllCollaboratorsOnDB = require('./getAllCollaboratorsOnDB');
 const getAllProjectsOnDB = require('./getAllProjectsOnDB');
 const deleteTaskById = require('./deleteTaskById');
+const timeTrackersByTaskId = require('./timeTrackersByTaskId');
+const deleteTimeTrackersByTaskId = require('./deleteTimeTrackersByTaskId');
 
 async function createNewTaskOnDB(payload) {
   try {
@@ -156,6 +158,12 @@ async function deleteTaskService(taskId, token) {
 
   if (!deleted) {
     Errors.NotFound('Task not found');
+  }
+
+  const timeTrackersByTask = await timeTrackersByTaskId(taskId);
+
+  if (timeTrackersByTask.length > 0) {
+    await deleteTimeTrackersByTaskId(taskId);
   }
 }
 
