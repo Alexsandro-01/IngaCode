@@ -8,7 +8,7 @@ const {
 
 const taskRoute = Router();
 
-taskRoute.get('/read', getTasksController);
+taskRoute.get('/get', getTasksController);
 taskRoute.post('/create', createTaskController);
 taskRoute.patch('/update/:taskId', updateTaskController);
 taskRoute.delete('/delete/:taskId', deleteTasksController);

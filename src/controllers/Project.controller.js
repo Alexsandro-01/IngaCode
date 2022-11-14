@@ -2,6 +2,7 @@ const {
   createProjectService,
   updateProjectService,
   deleteProjectService,
+  getProjectsService,
 } = require('../services/Project.service');
 
 /** @type {import('express').RequestHandler} */
@@ -12,6 +13,15 @@ async function createProjectController(req, res) {
   await createProjectService(payload, token);
 
   res.sendStatus(204);
+}
+
+/** @type {import('express').RequestHandler} */
+async function getProjectController(req, res) {
+  const token = req.headers.authorization;
+
+  const projects = await getProjectsService(token);
+
+  res.status(200).json(projects);
 }
 
 /** @type {import('express').RequestHandler} */
@@ -37,6 +47,7 @@ async function deleteProjectCOntroller(req, res) {
 
 module.exports = {
   createProjectController,
+  getProjectController,
   updateProjectController,
   deleteProjectCOntroller,
 };
