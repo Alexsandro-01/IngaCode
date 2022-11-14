@@ -1,8 +1,12 @@
 const { Router } = require('express');
-const projectController = require('../controllers/Project.controller');
+const {
+  createProjectController,
+  updateProjectController,
+} = require('../controllers/Project.controller');
 
 const projectRoute = Router();
 
-projectRoute.post('/create', projectController);
+projectRoute.post('/create', createProjectController);
+projectRoute.patch('/update/:projectId', updateProjectController);
 
 module.exports = projectRoute;

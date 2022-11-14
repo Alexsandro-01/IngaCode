@@ -1,13 +1,30 @@
-const projectService = require('../services/Project.service');
+const {
+  createProjectService,
+  updateProjectService,
+} = require('../services/Project.service');
 
 /** @type {import('express').RequestHandler} */
-async function projectController(req, res) {
+async function createProjectController(req, res) {
   const token = req.headers.authorization;
   const payload = req.body;
 
-  await projectService(payload, token);
+  await createProjectService(payload, token);
 
-  res.sendStatus(201);
+  res.sendStatus(204);
 }
 
-module.exports = projectController;
+/** @type {import('express').RequestHandler} */
+async function updateProjectController(req, res) {
+  const token = req.headers.authorization;
+  const { projectId } = req.params;
+  const payload = req.body;
+
+  await updateProjectService(payload, projectId, token);
+
+  res.sendStatus(204);
+}
+
+module.exports = {
+  createProjectController,
+  updateProjectController,
+};
