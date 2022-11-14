@@ -1,10 +1,9 @@
 const { v4: uuidv4 } = require('uuid');
 const projectSchema = require('../validations/project');
-const jwt = require('../validations/jwt');
 const Errors = require('../errors/Errors');
-const getUserOnDB = require('./getUserOnDB');
 const ProjectModel = require('../models/Projects.model');
 const existsProject = require('./existsProject');
+const authUser = require('./authUserByToken');
 
 async function createNewProjectOnDB(payload) {
   try {
@@ -19,19 +18,40 @@ async function createNewProjectOnDB(payload) {
   }
 }
 
-async function projectService(payload, token) {
+async function getProjectById(_id) {
+  try {
+    const response = await ProjectModel.findOne({
+      _id,
+    });
+    return response;
+  } catch (error) {
+    Errors.InternalServerError();
+  }
+}
+
+async function updateProjectById(payload, _id) {
+  try {
+    await ProjectModel.findOneAndUpdate(
+      { _id },
+      {
+        ...payload,
+        UpdatedAt: new Date().toJSON(),
+      },
+    );
+  } catch (error) {
+    Errors.InternalServerError();
+  }
+}
+
+async function createProjectService(payload, token) {
   const parsedProject = projectSchema.safeParse(payload);
 
   if (!parsedProject.success) {
     throw parsedProject.error;
   }
 
-  const userData = await jwt.veryfyTokenJwt(token);
-  const user = await getUserOnDB(userData);
+  await authUser(token);
 
-  if (!user) {
-    Errors.BadRequest();
-  }
   const exists = await existsProject(parsedProject.data);
 
   if (exists) {
@@ -41,4 +61,24 @@ async function projectService(payload, token) {
   await createNewProjectOnDB(parsedProject.data);
 }
 
-module.exports = projectService;
+async function updateProjectService(payload, projectId, token) {
+  await authUser(token);
+
+  const parsedProject = projectSchema.safeParse(payload);
+
+  if (!parsedProject.success) {
+    throw parsedProject.error;
+  }
+
+  const project = await getProjectById(projectId);
+  if (!project) {
+    Errors.NotFound('Project not found');
+  }
+
+  await updateProjectById(parsedProject.data, projectId);
+}
+
+module.exports = {
+  createProjectService,
+  updateProjectService,
+};
