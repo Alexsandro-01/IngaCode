@@ -1,8 +1,8 @@
-const { v4: uuidv4 } = require('uuid');
 const Errors = require('../errors/Errors');
 const TimeTrackerModel = require('../models/TimeTrackers.model');
-const existsTaskById = require('./existsTaskById');
-const getCollaboratorById = require('./getCollaboratorById');
+const TaskModel = require('../models/Tasks.model');
+const CollaboratorModel = require('../models/Collaborators.model');
+
 const { 
   checkTimetrackers,
   validDates,
@@ -10,72 +10,9 @@ const {
   timeToCalcByDay,
   timeToCalcByMonth,
 } = require('./timeTrackerhelpers');
+
 const updateTimeTrackerSchema = require('../validations/updateTimeTracker');
 const authUser = require('./authUserByToken');
-
-async function createNewTimeTrackerOnDB(payload) {
-  try {
-    await TimeTrackerModel.create({
-      _id: uuidv4(),
-      ...payload,
-      CreatedAt: new Date().toUTCString(),
-      UpdatedAt: new Date().toUTCString(),
-    });
-  } catch (error) {
-    Errors.InternalServerError();
-  }
-}
-
-async function getAllTimeTrackersOnDB() {
-  try {
-    const timeTrackers = await TimeTrackerModel.find(
-    {
-      DeletedAt: null,
-    },
-    {
-      DeletedAt: 0,
-      UpdatedAt: 0,
-      CreatedAt: 0,
-    },
-);
-  
-    return timeTrackers;
-  } catch (error) {
-    Errors.InternalServerError();    
-  }
-}
-
-async function getTimetrackerById(_id) {
-  try {
-    const timeTracker = await TimeTrackerModel.findOne(
-      {
-        $and: [
-          { _id },
-          { DeletedAt: null },
-        ],
-      },
-    );
-    return timeTracker;
-  } catch (error) {
-    Errors.InternalServerError();
-  }
-}
-
-async function updateTimeTrackerById(payload, _id) {
-  try {
-    const response = await TimeTrackerModel.findOneAndUpdate(
-      { _id },
-      {
-        ...payload,
-        UpdatedAt: new Date().toJSON(),
-      },
-    );
-  
-    return response;
-  } catch (error) {
-    Errors.InternalServerError();
-  }
-}
 
 async function createTimeTrackerService(payload, token) {
   const parsedTimeTracker = await validDates(payload);
@@ -83,22 +20,22 @@ async function createTimeTrackerService(payload, token) {
   await authUser(token);
 
   if (payload.CollaboratorId) {
-    const collaborator = await getCollaboratorById(payload.CollaboratorId);
+    const collaborator = await CollaboratorModel.getCollaboratorById(payload.CollaboratorId);
     if (!collaborator) Errors.BadRequest('Collaborator with CollaboratorId don\'t exists');
   }
 
-  const exists = await existsTaskById(payload);
+  const exists = await TaskModel.getTaskById(parsedTimeTracker.data.TaskId);
   if (!exists) {
     Errors.NotFound('The informed Project don\'t exists');
   }
 
   await checkTimetrackers([payload.StartDate, payload.EndDate]);
 
-  await createNewTimeTrackerOnDB(parsedTimeTracker.data);
+  await TimeTrackerModel.createNewTimeTracker(parsedTimeTracker.data);
 }
 
 async function getTimeToday() {
-  const trackers = await getAllTimeTrackersOnDB();
+  const trackers = await TimeTrackerModel.getAllTimeTrackers();
   const today = new Date().toJSON();
   const timeToCalc = timeToCalcByDay(trackers, [], today);
   const totalTime = calcTotalTime(timeToCalc);
@@ -107,7 +44,7 @@ async function getTimeToday() {
 }
 
 async function getTimeMonth() {
-  const trackers = await getAllTimeTrackersOnDB();
+  const trackers = await TimeTrackerModel.getAllTimeTrackers();
   const timeToCalc = timeToCalcByMonth(trackers, []);
   const totalTime = calcTotalTime(timeToCalc);
 
@@ -136,7 +73,7 @@ async function updateTimeTrackerService(payload, timeTrackerId, token) {
   
   const { data } = validPayloadUpdateTimeTracker(payload);
 
-  const timeTracker = await getTimetrackerById(timeTrackerId);
+  const timeTracker = await TimeTrackerModel.getTimetrackerById(timeTrackerId);
   if (!timeTracker) {
     Errors.NotFound('TimeTracker not found');
   }
@@ -146,11 +83,11 @@ async function updateTimeTrackerService(payload, timeTrackerId, token) {
     Errors.BadRequest(`${data.EndDate} must be a valid Date`);
   }
 
-  if (!getCollaboratorById(payload.CollaboratorId)) {
+  if (!CollaboratorModel.getCollaboratorById(payload.CollaboratorId)) {
     Errors.NotFound('Collaborator not found');
   }
 
-  await updateTimeTrackerById(data, timeTrackerId);
+  await TimeTrackerModel.updateTimeTrackerById(data, timeTrackerId);
 }
 
 async function getTimeService(token) {
@@ -158,15 +95,11 @@ async function getTimeService(token) {
   const today = await getTimeToday();
   const month = await getTimeMonth();
 
-  return {
-    today,
-    month,
-  };
+  return { today, month };
 }
 
 module.exports = {
   createTimeTrackerService,
   updateTimeTrackerService,
-  getAllTimeTrackersOnDB,
   getTimeService,
 };

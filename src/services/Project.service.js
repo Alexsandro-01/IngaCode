@@ -1,64 +1,10 @@
-const { v4: uuidv4 } = require('uuid');
 const projectSchema = require('../validations/project');
 const Errors = require('../errors/Errors');
-const ProjectModel = require('../models/Projects.model');
-const existsProject = require('./existsProject');
-const existsProjectById = require('./existsprojectById');
 const authUser = require('./authUserByToken');
-const deleteTasksByProjectId = require('./deleteTasksByProjectId');
-const getTasksByProjectId = require('./getTasksByProjectId');
-const deleteTimeTrackersByTaskId = require('./deleteTimeTrackersByTaskId');
-const getAllProjectsOnDB = require('./getAllProjectsOnDB');
 
-async function createNewProjectOnDB(payload) {
-  try {
-    await ProjectModel.create({
-      _id: uuidv4(),
-      Name: payload.Name,
-      CreatedAt: new Date(),
-      UpdatedAt: new Date(),
-    });
-  } catch (error) {
-    Errors.InternalServerError();
-  }
-}
-
-async function getProjectById(_id) {
-  try {
-    const response = await ProjectModel.findOne({
-      _id,
-    });
-    return response;
-  } catch (error) {
-    Errors.InternalServerError();
-  }
-}
-
-async function updateProjectById(payload, _id) {
-  try {
-    await ProjectModel.findOneAndUpdate(
-      { _id },
-      {
-        ...payload,
-        UpdatedAt: new Date().toJSON(),
-      },
-    );
-  } catch (error) {
-    Errors.InternalServerError();
-  }
-}
-
-async function deleteProjectById(_id) {
-  try {
-    const response = await ProjectModel.findOneAndUpdate(
-      { _id },
-      { DeletedAt: new Date().toJSON() },
-    );
-    return response;
-  } catch (error) {
-    Errors.InternalServerError();
-  }
-}
+const TaskModel = require('../models/Tasks.model');
+const ProjectModel = require('../models/Projects.model');
+const TimeTrackerModel = require('../models/TimeTrackers.model');
 
 async function createProjectService(payload, token) {
   const parsedProject = projectSchema.safeParse(payload);
@@ -69,19 +15,19 @@ async function createProjectService(payload, token) {
 
   await authUser(token);
 
-  const exists = await existsProject(parsedProject.data);
+  const exists = await ProjectModel.existsProjectByName(parsedProject.data);
 
   if (exists) {
     Errors.Conflict('This Project name allread exists');
   }
 
-  await createNewProjectOnDB(parsedProject.data);
+  await ProjectModel.createNewProject(parsedProject.data);
 }
 
 async function getProjectsService(token) {
   await authUser(token);
 
-  const projects = await getAllProjectsOnDB();
+  const projects = await ProjectModel.getAllProjects();
 
   return projects;
 }
@@ -95,34 +41,34 @@ async function updateProjectService(payload, projectId, token) {
     throw parsedProject.error;
   }
 
-  const project = await getProjectById(projectId);
+  const project = await ProjectModel.getProjectById(projectId);
   if (!project) {
     Errors.NotFound('Project not found');
   }
 
-  await updateProjectById(parsedProject.data, projectId);
+  await ProjectModel.updateProjectById(parsedProject.data, projectId);
 }
 
 async function deleteProjectService(projectId, token) {
   await authUser(token);
 
-  const exist = await existsProjectById({ ProjectId: projectId });
+  const exist = await ProjectModel.getProjectById({ ProjectId: projectId });
   
   if (!exist) {
     Errors.NotFound('Project not found');
   }
 
-  await deleteProjectById(projectId);
+  await ProjectModel.deleteProjectById(projectId);
 
-  const tasksByproject = await getTasksByProjectId(projectId);
+  const tasksByproject = await TaskModel.getTasksByProjectId(projectId);
 
   Promise.all(
     tasksByproject.map((task) => 
       // eslint-disable-next-line no-underscore-dangle
-       deleteTimeTrackersByTaskId(task._id)),
+      TimeTrackerModel.deleteTimeTrackersByTaskId(task._id)),
   );
 
-  await deleteTasksByProjectId(projectId);
+  await TaskModel.deleteTasksByProjectId(projectId);
 }
 
 module.exports = {
