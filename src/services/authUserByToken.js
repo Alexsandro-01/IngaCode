@@ -1,10 +1,10 @@
 const jwt = require('../validations/jwt');
-const getUserOnDB = require('./getUserOnDB');
+const UserModel = require('../models/Users.model');
 const Errors = require('../errors/Errors');
 
 async function authUser(token) {
   const userData = await jwt.veryfyTokenJwt(token);
-  const user = await getUserOnDB(userData);
+  const user = await UserModel.getUserByName(userData);
 
   if (!user) {
     Errors.BadRequest();
