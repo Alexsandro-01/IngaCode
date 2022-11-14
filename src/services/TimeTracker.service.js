@@ -153,10 +153,20 @@ async function updateTimeTrackerService(payload, timeTrackerId, token) {
   await updateTimeTrackerById(data, timeTrackerId);
 }
 
+async function getTimeService(token) {
+  await authUser(token);
+  const today = await getTimeToday();
+  const month = await getTimeMonth();
+
+  return {
+    today,
+    month,
+  };
+}
+
 module.exports = {
   createTimeTrackerService,
   updateTimeTrackerService,
-  getTimeToday,
-  getTimeMonth,
   getAllTimeTrackersOnDB,
+  getTimeService,
 };
