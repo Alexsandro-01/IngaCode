@@ -4,7 +4,7 @@ const CollaboratorModel = require('../models/Collaborators.model');
 async function getAllCollaboratorsOnDB() {
   try {
     const collaborators = await CollaboratorModel.find({
-      where: { DeletedAt: null },
+      DeletedAt: null,
     });
 
     return collaborators;

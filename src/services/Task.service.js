@@ -47,7 +47,7 @@ async function getAlltasksOnDB() {
   try {
     const response = await TaskModel.find(
     {
-      DeletedAt: { $eq: null },
+      DeletedAt: null,
     },
     {
       DeletedAt: 0,

@@ -5,7 +5,7 @@ async function getAllProjectsOnDB() {
   try {
     const response = await ProjectModel.find(
         {
-          where: { DeletedAt: null },
+          DeletedAt: null,
         },
         {
           DeletedAt: 0,

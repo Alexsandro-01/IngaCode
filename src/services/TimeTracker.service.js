@@ -30,7 +30,7 @@ async function getAllTimeTrackersOnDB() {
   try {
     const timeTrackers = await TimeTrackerModel.find(
     {
-      where: { DeletedAt: null },
+      DeletedAt: null,
     },
     {
       DeletedAt: 0,
