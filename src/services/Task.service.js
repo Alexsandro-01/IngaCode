@@ -114,24 +114,23 @@ async function updateTaskService(payload, taskId, token) {
 }
 
 function joinTables(trackers, tasks, collaborators, projects) {
-  const response = trackers.map((tracker) => {
-    const collaborator = collaborators.filter((value) => value._id === tracker.CollaboratorId);
+  const response = tasks.map((task) => {
+    const timeTrackers = trackers.filter((value) => value.TaskId === task._id);
+    
+    const timeTrackersWithProjectName = timeTrackers.map((track) => {
+      const [collaborator] = collaborators.filter((value) => value._id === track.CollaboratorId);
 
-    const task = tasks.filter((value) => value._id === tracker.TaskId);
+      return { ...track.toJSON(), CollaboratorName: collaborator._doc.Name };
+    });
+    
+    let ProjectName;
+    projects.forEach((project) => {
+      if (project._id === task.ProjectId) {
+        ProjectName = project.Name;
+      }
+    });
 
-    if (task.length > 0) {
-      projects.forEach((project) => {
-        if (project._id === task[0].ProjectId) {
-          task[0]._doc.ProjectName = project.Name;
-        }
-      });
-    }
-
-    return {
-      ...tracker.toJSON(),
-      Collaborator: collaborator[0].Name,
-      Task: task,
-    };
+    return { ...task.toJSON(), ProjectName, TimeTrackers: timeTrackersWithProjectName };
   });
   
   return response;
