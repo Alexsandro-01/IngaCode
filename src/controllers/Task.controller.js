@@ -2,6 +2,7 @@ const {
   createTaskService,
   updateTaskService,
   getTasksService,
+  deleteTaskService,
  } = require('../services/Task.service');
 
 /** @type {import('express').RequestHandler} */
@@ -21,7 +22,7 @@ async function updateTaskController(req, res) {
 
   await updateTaskService(taskData, taskId, token);
 
-  res.sendStatus(200);
+  res.sendStatus(204);
 }
 
 /** @type {import('express').RequestHandler} */
@@ -33,8 +34,19 @@ async function getTasksController(req, res) {
   res.status(200).json(response);
 }
 
+/** @type {import('express').RequestHandler} */
+async function deleteTasksController(req, res) {
+  const token = req.headers.authorization;
+  const { taskId } = req.params;
+
+  await deleteTaskService(taskId, token);
+
+  res.sendStatus(204);
+}
+
 module.exports = {
   createTaskController,
   updateTaskController,
   getTasksController,
+  deleteTasksController,
 };
