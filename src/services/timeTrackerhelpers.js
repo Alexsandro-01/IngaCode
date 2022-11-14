@@ -5,8 +5,7 @@ const TimeTrackerModel = require('../models/TimeTrackers.model');
 async function getTimetrackers() {
   try {
     const response = await TimeTrackerModel.find({
-      raw: true,
-      where: { DeletedAt: null },
+      DeletedAt: null,
     });
     return response;
   } catch (error) {
