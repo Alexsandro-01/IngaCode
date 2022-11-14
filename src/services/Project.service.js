@@ -1,10 +1,9 @@
 const { v4: uuidv4 } = require('uuid');
 const projectSchema = require('../validations/project');
-const jwt = require('../validations/jwt');
 const Errors = require('../errors/Errors');
-const getUserOnDB = require('./getUserOnDB');
 const ProjectModel = require('../models/Projects.model');
 const existsProject = require('./existsProject');
+const authUser = require('./authUserByToken');
 
 async function createNewProjectOnDB(payload) {
   try {
@@ -26,12 +25,8 @@ async function projectService(payload, token) {
     throw parsedProject.error;
   }
 
-  const userData = await jwt.veryfyTokenJwt(token);
-  const user = await getUserOnDB(userData);
+  await authUser(token);
 
-  if (!user) {
-    Errors.BadRequest();
-  }
   const exists = await existsProject(parsedProject.data);
 
   if (exists) {
