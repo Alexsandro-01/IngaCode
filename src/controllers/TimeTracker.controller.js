@@ -21,7 +21,7 @@ async function updateTimeTrackerController(req, res) {
 
   await updateTimeTrackerService(payload, timeTrackerId, token);
 
-  res.sendStatus(200);
+  res.sendStatus(204);
 }
 
 module.exports = {
