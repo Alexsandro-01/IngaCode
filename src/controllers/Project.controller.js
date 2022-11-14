@@ -1,6 +1,7 @@
 const {
   createProjectService,
   updateProjectService,
+  deleteProjectService,
 } = require('../services/Project.service');
 
 /** @type {import('express').RequestHandler} */
@@ -24,7 +25,18 @@ async function updateProjectController(req, res) {
   res.sendStatus(204);
 }
 
+/** @type {import('express').RequestHandler} */
+async function deleteProjectCOntroller(req, res) {
+  const token = req.headers.authorization;
+  const { projectId } = req.params;
+
+  await deleteProjectService(projectId, token);
+
+  res.sendStatus(204);
+}
+
 module.exports = {
   createProjectController,
   updateProjectController,
+  deleteProjectCOntroller,
 };
