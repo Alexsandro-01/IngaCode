@@ -7,6 +7,6 @@ const {
 const timeTrackerRoute = Router();
 
 timeTrackerRoute.post('/create', createtimeTrackerController);
-timeTrackerRoute.post('/update/:timeTrackerId', updateTimeTrackerController);
+timeTrackerRoute.patch('/update/:timeTrackerId', updateTimeTrackerController);
 
 module.exports = timeTrackerRoute;
