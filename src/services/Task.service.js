@@ -12,6 +12,7 @@ const getTaskById = require('./getTaskById');
 const { getAllTimeTrackersOnDB } = require('./TimeTracker.service');
 const getAllCollaboratorsOnDB = require('./getAllCollaboratorsOnDB');
 const getAllProjectsOnDB = require('./getAllProjectsOnDB');
+const deleteTaskById = require('./deleteTaskById');
 
 async function createNewTaskOnDB(payload) {
   try {
@@ -45,13 +46,13 @@ async function updateTaskById(payload, _id) {
 async function getAlltasksOnDB() {
   try {
     const response = await TaskModel.find(
-{
-      where: { DeletedAt: null },
+    {
+      DeletedAt: { $eq: null },
     },
     {
       DeletedAt: 0,
-      UpdatedAt: 0,
       CreatedAt: 0,
+      UpdatedAt: 0,
     },
 );
     return response;
@@ -118,13 +119,13 @@ function joinTables(trackers, tasks, collaborators, projects) {
 
     const task = tasks.filter((value) => value._id === tracker.TaskId);
 
-    projects.forEach((project) => {
-      const a = project._id;
-      const b = task[0].ProjectId;
-      if (a === b) {
-        task[0]._doc.ProjectName = project.Name;
-      }
-    });
+    if (task.length > 0) {
+      projects.forEach((project) => {
+        if (project._id === task[0].ProjectId) {
+          task[0]._doc.ProjectName = project.Name;
+        }
+      });
+    }
 
     return {
       ...tracker.toJSON(),
@@ -149,8 +150,19 @@ async function getTasksService(token) {
   return response;
 }
 
+async function deleteTaskService(taskId, token) {
+  await authUser(token);
+
+  const deleted = await deleteTaskById(taskId);
+
+  if (!deleted) {
+    Errors.NotFound('Task not found');
+  }
+}
+
 module.exports = {
   createTaskService,
   updateTaskService,
   getTasksService,
+  deleteTaskService,
 };

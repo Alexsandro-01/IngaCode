@@ -3,12 +3,14 @@ const {
   createTaskController,
   updateTaskController,
   getTasksController,
+  deleteTasksController,
 } = require('../controllers/Task.controller');
 
 const taskRoute = Router();
 
 taskRoute.get('/read', getTasksController);
 taskRoute.post('/create', createTaskController);
-taskRoute.post('/update/:taskId', updateTaskController);
+taskRoute.patch('/update/:taskId', updateTaskController);
+taskRoute.delete('/delete/:taskId', deleteTasksController);
 
 module.exports = taskRoute;
