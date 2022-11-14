@@ -38,7 +38,6 @@ function calcTimeInterval(startDate, endDate) {
     minutes: interval.getUTCMinutes(),
     seconds: interval.getUTCSeconds(),
   };
-  // console.log(result);
   return result;
 }
 
@@ -57,7 +56,6 @@ function calcTotalTime(timeDayList) {
   const minutes = hourInMinutes >= 1 ? (m - (hourInMinutes * 60)) : m;
   const hours = hourInMinutes >= 1 ? h + hourInMinutes : h;
 
-  console.log(hours, minutes, s);
   return { hours, minutes, seconds: s };
 }
 
