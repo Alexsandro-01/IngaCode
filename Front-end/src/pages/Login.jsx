@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {requestLogin} from '../services/services'
-import {setUserOnStorage} from '../services/localStorage'
+import {setUserOnStorage} from '../services/sessionStorage'
 import '../styles/login.css'
 
 function Login() {
@@ -76,8 +76,7 @@ function Login() {
               }}
             />
           </div>
-          <div>
-          {
+            {
               warning.message.length > 0 && (
                 <p className='warning'>{ warning.message }</p>
               )
@@ -88,8 +87,6 @@ function Login() {
               disabled={ disabled }
               onClick={ (event) => stopSubmit(event)}
             >Enter</button>
-          </div>
-
           </div>
         </form>
       </section>
