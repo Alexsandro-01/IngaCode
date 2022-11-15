@@ -1,9 +1,9 @@
 export function setUserOnStorage(token) {
-  localStorage.setItem('token', token)
+  sessionStorage.setItem('token', token)
 }
 
 export function getUserOnStorage() {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
 
   return token;
 }

@@ -17,3 +17,41 @@ export async function requestLogin(data) {
   return user;
 };
 
+export async function requestCreateProject(data, token) {
+  const url = 'http://localhost:3001/projects/create';
+
+  const dataJson = JSON.stringify(data);
+
+  const obj = {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+    body: dataJson
+  }
+  
+  const response = await fetch(url, obj);
+  
+  return response;
+};
+
+export async function requestTasks(token) {
+  const url = 'http://localhost:3001/tasks/get'
+
+  const obj = {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      authorization: token,
+    }
+  }
+
+  const response = await fetch(url, obj);
+
+  const tasks = await response.json()
+  return tasks;
+}
+
