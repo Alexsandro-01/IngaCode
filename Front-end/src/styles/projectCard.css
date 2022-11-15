@@ -1,5 +1,6 @@
-.project-card button {
-  width: 30%;
+.project-card div button {
+  width: 25%;
+  font-size: small;
   padding: 4px;
   margin-right: 8px;
 }
