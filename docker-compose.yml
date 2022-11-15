@@ -2,6 +2,7 @@ version: '3.9'
 
 services:
   frontend:
+    container_name: app_frontend
     build: ./Front-end
     ports:
       - 3000:3000
@@ -20,7 +21,7 @@ services:
     restart: always
     command: npm run dev
     volumes:
-      - ./Back-end:/app_backend
+      - ./Back-end:/app-backend
     depends_on:
       - db
     environment:
