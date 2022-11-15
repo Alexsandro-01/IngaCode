@@ -1,6 +1,9 @@
+.create-page {
+  color: #555353;
+}
 .create-page section {
   width: 90%;
-  margin: auto;
+  margin: 10px auto;
   border-radius: 8px;
   padding: 16px;
   text-align: center;

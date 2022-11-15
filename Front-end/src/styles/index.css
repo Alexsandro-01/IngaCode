@@ -45,3 +45,7 @@ header ul li a {
   color: #42b983;
   padding: 4px;
 }
+
+.danger {
+  background-color: #fa4040;
+}

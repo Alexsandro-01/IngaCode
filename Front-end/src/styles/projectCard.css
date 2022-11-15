@@ -1,0 +1,14 @@
+.project-card button {
+  width: 30%;
+  padding: 4px;
+  margin-right: 8px;
+}
+
+.project-card div:last-child {
+  display: flex;
+  justify-content: center;
+}
+
+.project-card button:last-child {
+  background-color: rgb(247, 82, 82);
+}
