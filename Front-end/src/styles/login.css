@@ -1,0 +1,46 @@
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-page section {
+  width: 90%;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  background-color: #f8f8f8;
+}
+
+.login-page h1 {
+  color: #e96900;
+}
+
+.login-page input {
+  width: 90%;
+  margin: 4px;
+  font-size: medium;
+  border: 1px solid #818080;
+  border-radius: 4px;
+  padding: 8px 16px;
+  outline-color: #42b983;
+}
+
+.login-page div {
+  padding: 8px 0;
+}
+
+.login-page button {
+  width: 90%;
+  padding: 8px;
+  background-color: #42b983;
+  color: #ffffff;
+  font-weight: bolder;
+  font-size: medium;
+  border: none;
+  border-radius: 4px;
+}
+
+.login-page button:disabled {
+  background-color: #d9f7ea;
+}

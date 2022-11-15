@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {requestLogin} from '../services/services'
 import {setUserOnStorage} from '../services/localStorage'
-
+import '../styles/login.css'
 
 function Login() {
   const [loginState, setLoginState] = useState({
@@ -14,6 +15,7 @@ function Login() {
   });
 
   const {UserName, Password, disabled} = loginState;
+  const navigate = useNavigate()
 
   function validation() {
     const { UserName, Password } = loginState;
@@ -40,6 +42,8 @@ function Login() {
     } else {
       setWarning({ message: ''});
       setUserOnStorage(user.token)
+
+      navigate('/tasks')
     }
   }
 
@@ -48,7 +52,7 @@ function Login() {
   }, [UserName, Password])
 
   return(
-    <main>
+    <main className='login-page'>
       <section>
         <h1>Login</h1>
         <form>
@@ -62,6 +66,7 @@ function Login() {
               }}
             />
           </div>
+          <div>
             <input
               type="text"
               placeholder='Type your Password'
@@ -70,6 +75,7 @@ function Login() {
                 setLoginState({ ...loginState, Password: target.value });
               }}
             />
+          </div>
           <div>
           {
               warning.message.length > 0 && (
