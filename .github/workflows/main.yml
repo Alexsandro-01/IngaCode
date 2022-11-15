@@ -17,7 +17,7 @@ jobs:
           node-version: 14
       
       - name: Instalação das dependências
-        run: npm ci
+        run: cd Back-end && npm ci
 
       - name: Rodando ESlint
-        run: npm run lint
+        run: cd Back-end && npm run lint
