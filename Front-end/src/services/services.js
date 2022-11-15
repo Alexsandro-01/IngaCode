@@ -110,3 +110,23 @@ export async function requestTasks(token) {
   return tasks;
 }
 
+export async function requestCreateTask(data, token) {
+  const url = 'http://localhost:3001/tasks/create';
+
+  const dataJson = JSON.stringify(data);
+
+  const obj = {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+    body: dataJson
+  }
+  
+  const response = await fetch(url, obj);
+  
+  return response;
+};
+
