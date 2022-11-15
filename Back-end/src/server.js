@@ -12,7 +12,9 @@ const ErrorMiddleware = require('./middlewares/ErrorMiddleware');
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000',
+}));
 
 app.get('/', async (req, res) => {
   res.status(200).json({ message: 'Hello!' });
