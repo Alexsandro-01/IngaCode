@@ -1,5 +1,6 @@
 const express = require('express');
 require('express-async-errors');
+const cors = require('cors');
 
 const loginRoute = require('./routes/Login.routes');
 const projectRoute = require('./routes/Project.routes');
@@ -11,6 +12,7 @@ const ErrorMiddleware = require('./middlewares/ErrorMiddleware');
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 app.get('/', async (req, res) => {
   res.status(200).json({ message: 'Hello!' });

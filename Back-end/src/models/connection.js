@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
+require('dotenv/config');
 
-mongoose.connect('mongodb://localhost:27017/ingacode');
+const { MONGO_URI } = process.env;
+
+mongoose.connect(MONGO_URI);
 
 module.exports = mongoose;
