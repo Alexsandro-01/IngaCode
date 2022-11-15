@@ -10,7 +10,38 @@ main {
   font-family: 'Courier New', Courier, monospace;
 }
 
+header {
+  margin-bottom: 20px;
+}
+
+header h1 {
+  color: #e96900;
+  text-align: center;
+  padding: 16px 8px;
+}
+
+header ul {
+  display: flex;
+  list-style: none;
+  font-size: 0.85rem;
+  font-weight: bold;
+  justify-content: space-around;
+}
+
+header ul li {
+  padding: 4px;
+}
+
+header ul li a {
+  color: #42b983;
+}
+
 .warning {
   color: red;
+  padding: 4px;
+}
+
+.success {
+  color: #42b983;
   padding: 4px;
 }
