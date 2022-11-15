@@ -57,6 +57,23 @@ export async function requestUpdateProject(data, projectId, token) {
   return response;
 };
 
+export async function requestDeleteProject(projectId, token) {
+  const url = `http://localhost:3001/projects/delete/${projectId}`;
+
+  const obj = {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+  }
+  
+  const response = await fetch(url, obj);
+  
+  return response;
+};
+
 export async function requestProjects(token) {
   const url = 'http://localhost:3001/projects/get'
 
