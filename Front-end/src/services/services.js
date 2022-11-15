@@ -37,6 +37,61 @@ export async function requestCreateProject(data, token) {
   return response;
 };
 
+export async function requestUpdateProject(data, projectId, token) {
+  const url = `http://localhost:3001/projects/update/${projectId}`;
+
+  const dataJson = JSON.stringify(data);
+
+  const obj = {
+    method: 'PATCH',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+    body: dataJson
+  }
+  
+  const response = await fetch(url, obj);
+  
+  return response;
+};
+
+export async function requestDeleteProject(projectId, token) {
+  const url = `http://localhost:3001/projects/delete/${projectId}`;
+
+  const obj = {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+  }
+  
+  const response = await fetch(url, obj);
+  
+  return response;
+};
+
+export async function requestProjects(token) {
+  const url = 'http://localhost:3001/projects/get'
+
+  const obj = {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      authorization: token,
+    }
+  }
+
+  const response = await fetch(url, obj);
+
+  const projects = await response.json()
+  return projects;
+}
+
 export async function requestTasks(token) {
   const url = 'http://localhost:3001/tasks/get'
 
