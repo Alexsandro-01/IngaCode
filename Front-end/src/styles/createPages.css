@@ -10,7 +10,7 @@
   background-color: #f8f8f8;
 }
 
-.create-page input {
+.create-page input, textarea, select {
   width: 90%;
   margin: 4px;
   font-size: medium;
@@ -18,6 +18,10 @@
   border-radius: 4px;
   padding: 8px 16px;
   outline-color: #42b983;
+}
+
+select {
+  text-align: center;
 }
 
 .create-page div {
