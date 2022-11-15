@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  frontend:
+    build: ./Front-end
+    ports:
+      - 3000:3000
+    working_dir: /app-frontend
+    volumes:
+      - ./Front-end:/app-frontend
+    depends_on:
+      - backend
+      
+  backend:
+    container_name: app_backend
+    build: ./Back-end
+    ports:
+      - 3001:3001
+    working_dir: /app-backend
+    restart: always
+    command: npm run dev
+    volumes:
+      - ./Back-end:/app_backend
+    depends_on:
+      - db
+    environment:
+      - MONGO_URI=mongodb://db:27017/ingacode
+        
+  db:
+    image: mongo:5.0.7
+    container_name: mongo
+    restart: always
+    ports:
+      - 27017:27017
+networks:
+  default:
+    name: task_timetracker
