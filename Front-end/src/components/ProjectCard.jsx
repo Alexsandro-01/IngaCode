@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { requestUpdateProject } from '../services/services'
+import { requestUpdateProject, requestDeleteProject } from '../services/services'
 import { getUserOnStorage } from '../services/sessionStorage'
 import '../styles/projectCard.css'
 
@@ -25,6 +25,28 @@ function ProjectCard({ project, fetchProjects }) {
       
       fetchProjects()
       setView(!view)
+      
+      setTimeout(() => {
+        setNotification({ success: '', warning: '' })
+      }, 3000);
+    } else {
+      const { message } = await response.json()
+      setNotification({success: '', warning: message});
+    }
+  }
+
+  async function deleteProject() {
+    const token = getUserOnStorage();
+
+    const response = await requestDeleteProject(
+      project._id,
+      token
+    );
+
+    if (response.status === 204) {
+      setNotification({success: 'deleted', warning: ''});
+      
+      fetchProjects()
       
       setTimeout(() => {
         setNotification({ success: '', warning: '' })
@@ -65,7 +87,7 @@ function ProjectCard({ project, fetchProjects }) {
           view && (
             <button
               type='button'
-              onClick={(event) => {
+              onClick={() => {
                 setView(!view)
               }}
             >
@@ -77,7 +99,7 @@ function ProjectCard({ project, fetchProjects }) {
           !view && (
             <button
               type='button'
-              onClick={(event) => {
+              onClick={() => {
                 updateProject()
               }}
             >
@@ -86,8 +108,14 @@ function ProjectCard({ project, fetchProjects }) {
           )
         }
         <button
-          className='danger'  
-        >delete</button>
+          type='button'
+          className='danger' 
+          onClick={() => {
+            deleteProject()
+          }}
+        >
+          delete
+        </button>
       </div>
     </section>
   )
