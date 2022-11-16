@@ -41,7 +41,7 @@ async function updateProjectService(payload, projectId, token) {
     throw parsedProject.error;
   }
 
-  const project = await ProjectModel.getProjectById(projectId);
+  const project = await ProjectModel.getProjectById({ ProjectId: projectId });
   if (!project) {
     Errors.NotFound('Project not found');
   }
