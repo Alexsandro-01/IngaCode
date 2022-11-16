@@ -9,11 +9,11 @@ function helperCheckTimetrackers(
   insertEndDate,
 ) {
   if (insertStartDate <= valueEndDate && insertStartDate >= valueStatDate) {
-    Errors.Conflict('Your StartDate collided with another time tracker.');
+    Errors.Conflict('Your time collided with another time tracker.');
   }
 
   if (insertEndDate <= valueEndDate && insertEndDate >= valueStatDate) {
-    Errors.Conflict('Your EndDate collided with another time tracker.');
+    Errors.Conflict('Your time collided with another time tracker.');
   }
 }
 

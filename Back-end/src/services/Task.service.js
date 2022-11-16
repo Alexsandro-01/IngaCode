@@ -70,6 +70,10 @@ function joinTables(trackers, tasks, collaborators, projects) {
     const timeTrackersWithProjectName = timeTrackers.map((track) => {
       const [collaborator] = collaborators.filter((value) => value._id === track.CollaboratorId);
 
+      if (!collaborator) {
+        return { ...track.toJSON() };
+      }
+      
       return { ...track.toJSON(), CollaboratorName: collaborator._doc.Name };
     });
     

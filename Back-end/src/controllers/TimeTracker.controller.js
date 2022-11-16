@@ -1,6 +1,7 @@
 const { 
   createTimeTrackerService, 
   updateTimeTrackerService,
+  deleteTimeTrackerService,
   getTimeService,
 } = require('../services/TimeTracker.service');
 
@@ -11,7 +12,7 @@ async function createtimeTrackerController(req, res) {
 
   await createTimeTrackerService(timeTrackerData, token);
 
-  res.sendStatus(201);
+  res.sendStatus(204);
 }
 
 /** @type {import('express').RequestHandler} */
@@ -34,8 +35,19 @@ async function getTimeController(req, res) {
   res.status(200).json(time);
 }
 
+/** @type {import('express').RequestHandler} */
+async function deleteTimetrackerController(req, res) {
+  const token = req.headers.authorization;
+  const { timeTrackerId } = req.params;
+  
+  await deleteTimeTrackerService(timeTrackerId, token);
+
+  res.sendStatus(204);
+}
+
 module.exports = {
   createtimeTrackerController,
   updateTimeTrackerController,
+  deleteTimetrackerController,
   getTimeController,
 };

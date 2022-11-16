@@ -118,10 +118,22 @@ async function getTimeTrackersByTaskId(taskId) {
   }
 }
 
+async function deleteTimeTrackerById(_id) {
+  try {
+    await TimeTrackerModel.findOneAndUpdate(
+      { _id },
+      { DeletedAt: new Date() },
+    );
+  } catch (error) {
+    Errors.InternalServerError();
+  }
+}
+
 module.exports = {
   getAllTimeTrackers,
   getTimetrackerById,
   createNewTimeTracker,
+  deleteTimeTrackerById,
   updateTimeTrackerById,
   getTimeTrackersByTaskId,
   deleteTimeTrackersByTaskId,

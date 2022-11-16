@@ -90,6 +90,17 @@ async function updateTimeTrackerService(payload, timeTrackerId, token) {
   await TimeTrackerModel.updateTimeTrackerById(data, timeTrackerId);
 }
 
+async function deleteTimeTrackerService(timeTrackerId, token) {
+  await authUser(token);
+  const timeTracker = await TimeTrackerModel.getTimetrackerById(timeTrackerId);
+  console.log(timeTracker);
+  if (!timeTracker) {
+    Errors.NotFound('TimeTracker not found');
+  }
+
+  await TimeTrackerModel.deleteTimeTrackerById(timeTrackerId);
+}
+
 async function getTimeService(token) {
   await authUser(token);
   const today = await getTimeToday();
@@ -101,5 +112,6 @@ async function getTimeService(token) {
 module.exports = {
   createTimeTrackerService,
   updateTimeTrackerService,
+  deleteTimeTrackerService,
   getTimeService,
 };
