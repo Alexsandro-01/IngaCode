@@ -2,6 +2,8 @@ const { loginSchema, checkPassword } = require('../validations/login');
 const Errors = require('../errors/Errors');
 const jwt = require('../validations/jwt');
 const UserModel = require('../models/Users.model');
+const CollaboratorsModel = require('../models/Collaborators.model');
+const authUser = require('./authUserByToken');
   
   async function loginService(payload) {
     const parsedLoginData = loginSchema.safeParse(payload);
@@ -22,4 +24,14 @@ const UserModel = require('../models/Users.model');
     return token;
 }
 
-module.exports = loginService;
+  async function CollaboratorService(token) {
+    await authUser(token);
+
+    const collaborators = await CollaboratorsModel.getAllCollaborators();
+    return collaborators;
+}
+
+module.exports = {
+  loginService,
+  CollaboratorService,
+};
