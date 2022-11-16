@@ -66,6 +66,13 @@ function Projects() {
             ))
           )
         }
+        {
+          projects.length === 0 && (
+            <section>
+              <p>There are no projects. Let's go to <Link to='/projects/create-project'>create one</Link></p>
+            </section>
+          )
+        }
       </>
     </main>
   )
