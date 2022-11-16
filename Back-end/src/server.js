@@ -6,6 +6,7 @@ const loginRoute = require('./routes/Login.routes');
 const projectRoute = require('./routes/Project.routes');
 const taskRoute = require('./routes/Task.routes');
 const timeTrackerRoute = require('./routes/TimeTracker.routes');
+const collaboratorsRoute = require('./routes/Collaborators.routes');
 
 const ErrorMiddleware = require('./middlewares/ErrorMiddleware');
 
@@ -21,6 +22,7 @@ app.get('/', async (req, res) => {
 });
 
 app.use('/login', loginRoute);
+app.use('/collaborators', collaboratorsRoute);
 app.use('/projects', projectRoute);
 app.use('/tasks', taskRoute);
 app.use('/timetrackers', timeTrackerRoute);
