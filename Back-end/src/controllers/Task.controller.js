@@ -11,7 +11,7 @@ async function createTaskController(req, res) {
   const taskData = req.body;
 
   await createTaskService(taskData, token);
-  res.sendStatus(201);
+  res.sendStatus(204);
 }
 
 /** @type {import('express').RequestHandler} */
