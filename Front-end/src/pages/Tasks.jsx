@@ -1,11 +1,13 @@
 import {Link, useNavigate} from 'react-router-dom'
 import context from '../context/AppContext'
-import {useEffect, useContext} from 'react'
+import {useEffect, useContext, useState} from 'react'
 import {getUserOnStorage} from '../services/sessionStorage'
-import {requestTasks} from '../services/services'
+import {requestTasks, requestTime} from '../services/services'
+import TaskCard from '../components/TaskCard'
 
 function Tasks() {
   const {tasks, setTasks} = useContext(context)
+  const [time, setTime] = useState({})
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -18,16 +20,28 @@ function Tasks() {
 
   async function fetchTasks() {
     const token = getUserOnStorage();
-
+    
     const response = await requestTasks(token);
     setTasks(response)
+  }
+  
+  async function fetchTime() {
+    const token = getUserOnStorage();
+    const response = await requestTime(token)
+
+    setTime(response)
   }
 
   useEffect(() => {
     fetchTasks()
   }, [])
+  
+  useEffect(() => {
+    fetchTime()
+  }, [tasks])
+  const {today, month} = time;
   return(
-    <main>
+    <main className='create-page'>
       <header>
         <h1>Tasks</h1>
         <nav>
@@ -55,9 +69,45 @@ function Tasks() {
           </ul>
         </nav>
       </header>
-      <section>
-        
-      </section>
+      <>
+        {
+          Object.prototype.hasOwnProperty.call(time, 'today') && (
+            <section>
+              <p>
+                Time today:
+                {' '}
+                <code>
+                  {today.hours <= 9 ? '0' + today.hours : today.hours}
+                </code>:
+                <code>
+                  {today.minutes <= 9 ? '0' + today.minutes : today.minutes}
+                </code>
+              </p>
+              <p>
+                Time this month until today:
+                {' '}
+                <code>
+                  {month.hours <= 9 ? '0' + month.hours : month.hours}
+                </code>:
+                <code>
+                  {month.minutes <= 9 ? '0' + month.minutes : month.minutes}
+                </code>
+              </p>
+            </section>
+          )
+        }
+        {
+          tasks.length > 0 && (
+            tasks.map((task) => (
+              <TaskCard
+                key={task._id}
+                task={task}
+                fetchTasks={fetchTasks}
+              />
+            ))
+          )
+        }
+      </>
     </main>
   )
 }
