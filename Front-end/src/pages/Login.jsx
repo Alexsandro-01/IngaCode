@@ -59,7 +59,7 @@ function Login() {
           <div>
             <input
               type="text"
-              placeholder='Type your UserName'
+              placeholder='UserName'
               value={ UserName }
               onChange={ ({ target }) => {
                 setLoginState({ ...loginState, UserName: target.value });
@@ -69,7 +69,7 @@ function Login() {
           <div>
             <input
               type="text"
-              placeholder='Type your Password'
+              placeholder='Password'
               value={ Password }
               onChange={ ({ target }) => {
                 setLoginState({ ...loginState, Password: target.value });
