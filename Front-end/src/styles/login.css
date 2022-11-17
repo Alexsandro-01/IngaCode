@@ -6,6 +6,7 @@
 
 .login-page section {
   width: 90%;
+  max-width: 400px;
   border-radius: 8px;
   padding: 16px;
   text-align: center;
@@ -28,19 +29,4 @@
 
 .login-page div {
   padding: 8px 0;
-}
-
-.login-page button {
-  width: 90%;
-  padding: 8px;
-  background-color: #42b983;
-  color: #ffffff;
-  font-weight: bolder;
-  font-size: medium;
-  border: none;
-  border-radius: 4px;
-}
-
-.login-page button:disabled {
-  background-color: #8efacb;
 }

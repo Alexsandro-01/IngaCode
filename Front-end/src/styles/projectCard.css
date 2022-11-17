@@ -1,6 +1,6 @@
 .project-card div button {
   width: 25%;
-  font-size: small;
+  max-width: 100px;
   padding: 4px;
   margin-right: 8px;
 }
@@ -10,6 +10,3 @@
   justify-content: center;
 }
 
-.project-card button:last-child {
-  background-color: rgb(247, 82, 82);
-}
