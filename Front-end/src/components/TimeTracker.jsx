@@ -1,5 +1,6 @@
 import {requestDeleteTimeTracker, requestUpdateTimeTracker} from '../services/services'
 import {getUserOnStorage} from '../services/sessionStorage'
+import {requestCollaborators} from '../services/services'
 import {useState} from 'react'
 
 function TimeTracker({tracker, fetchTasks}) {
@@ -7,6 +8,10 @@ function TimeTracker({tracker, fetchTasks}) {
     warning: '',
     success: ''
   });
+  const [view, setView] = useState(true)
+  const [collaborators, setCollaborators] = useState([])
+  const [CollaboratorId, setCollaboratorId] = useState('')
+
 
   const startDate = new Date(tracker.StartDate)
     .toLocaleString(
@@ -59,6 +64,14 @@ function TimeTracker({tracker, fetchTasks}) {
       setNotification({success: '', warning: message});
     }
   }
+
+  async function fetchCollaborators() {
+    const token = getUserOnStorage()
+    
+    const response = await requestCollaborators(token)
+    
+    setCollaborators(response)
+  }
   
   return (
     <div className='time-tracker'>
@@ -94,10 +107,51 @@ function TimeTracker({tracker, fetchTasks}) {
         )
       }
       {
-        tracker.CollaboratorName && (
+        tracker.CollaboratorName ? (
           <div>
             <small>Collaborator: {tracker.CollaboratorName}</small>
           </div>
+        ) : (
+          <>
+            <div style={{ display: view ? 'block' : 'none' }}>
+              <button
+                type='button'
+                className='success'
+                onClick={() => {
+                  setView(!view)
+                  fetchCollaborators()
+                }}
+              >Set collaborator</button>
+              </div>
+                
+            <div style={{ display: !view ? 'block' : 'none' }}>
+              <select
+                value={CollaboratorId}
+                onChange={({target}) => {
+                  setCollaboratorId(target.value)
+                }}
+              >
+                <option value=''>-- select --</option>
+                {
+                  collaborators.length > 0 && (
+                    collaborators.map((value) => (
+                      <option key={value._id} value={value._id}>{value.Name}</option>
+                    ))
+                  )
+                }
+              </select>
+              <button
+                type='button'
+                className='success'
+                disabled={!CollaboratorId}
+                onClick={() => {
+                  setView(!view)
+                  fetchUpdateTimeTracker({CollaboratorId})
+                }}
+              >Send collaborator</button>
+
+            </div>
+          </>
         )
       }
       <div>
