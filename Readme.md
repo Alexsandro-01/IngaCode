@@ -3,7 +3,7 @@
 # Contexto
 Este projeto trata-se de uma ferramenta para controle de tarefas com apontamento de horas.
 
-## Técnologias usadas
+## Tecnologias usadas
 
 Front-end:
 
