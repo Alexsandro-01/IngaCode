@@ -1,0 +1,63 @@
+.container {
+  width: 90%;
+  max-width: 1024px;
+}
+
+.task-card {
+  width: 100%;
+  max-width: 400px;
+}
+
+.task-card .task-info {
+  text-align: left;
+}
+
+.task-card h3 {
+  text-align: center;
+}
+
+.task-card  section {
+  padding: 0;
+}
+
+.task-card .double-elem-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.task-card .double-elem-container button {
+  width: 45%;
+}
+
+.time-tracker {
+  padding: 0px;
+  margin-bottom: 10px;
+  background-color: rgb(232, 231, 231);
+}
+
+.time-tracker button {
+  background-color: transparent;
+}
+
+.time-tracker button.success {
+  border: 1px solid #42b983;
+}
+
+.time-tracker button.danger {
+  border: 1px solid #f75252;
+  color: #f75252;
+}
+
+@media (min-width: 720px) {
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .task-card {
+    margin: 8px;
+    max-width: 320px;
+  }
+}

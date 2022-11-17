@@ -11,18 +11,24 @@ main {
 }
 
 header {
-  margin-bottom: 20px;
+  width: 100vw;
+  padding: 8px 0;
+  box-shadow: 0 0 5px #818080;
+  margin-bottom: 24px;
 }
 
 header h1 {
   color: #e96900;
   text-align: center;
-  padding: 16px 8px;
+  padding: 28px 8px;
 }
 
 header ul {
+  max-width: 720px;
+  margin: auto;
   display: flex;
   list-style: none;
+  padding-bottom: 8px;
   font-size: 0.85rem;
   font-weight: bold;
   justify-content: space-around;
@@ -36,16 +42,51 @@ header ul li a {
   color: #42b983;
 }
 
-.warning {
-  color: red;
-  padding: 4px;
+section {
+  width: 90%;
+  margin: 10px auto;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  background-color: #f8f8f8;
+}
+
+button {
+  width: 90%;
+  padding: 8px;
+  background-color: #42b983;
+  color: #ffffff;
+  font-weight: bolder;
+  border: none;
+  border-radius: 4px;
+}
+
+button:disabled {
+  background-color: #8efacb;
+}
+
+input, textarea, select {
+  width: 90%;
+  margin: 4px;
+  font-size: medium;
+  border: 1px solid #818080;
+  border-radius: 4px;
+  padding: 8px 16px;
+  outline-color: #42b983;
 }
 
 .success {
   color: #42b983;
-  padding: 4px;
 }
 
 .danger {
-  background-color: #fa4040;
+  background-color: #f75252;
+}
+
+.warning {
+  color: #e96900;
+}
+
+.warning-bg {
+  background-color: #e96900;
 }

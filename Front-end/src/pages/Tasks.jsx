@@ -4,6 +4,7 @@ import {useEffect, useContext, useState} from 'react'
 import {getUserOnStorage} from '../services/sessionStorage'
 import {requestTasks, requestTime} from '../services/services'
 import TaskCard from '../components/TaskCard'
+import Header from '../components/Header'
 
 function Tasks() {
   const {tasks, setTasks} = useContext(context)
@@ -39,40 +40,15 @@ function Tasks() {
   useEffect(() => {
     fetchTime()
   }, [tasks])
+
   const {today, month} = time;
+  
   return(
     <main className='create-page'>
-      <header>
-        <h1>Tasks</h1>
-        <nav>
-          <ul>
-            <li>
-              <Link to='/tasks/create-task'>
-                Create task
-              </Link>
-            </li>
-            <li>
-              <Link to='/projects/create-project'>
-                Create project
-              </Link>
-            </li>
-            <li>
-              <Link to='/tasks'>
-                Tasks
-              </Link>
-            </li>
-            <li>
-              <Link to='/projects'>
-                Projects
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      </header>
-      <>
+      <Header title='Tasks' />
         {
-          Object.prototype.hasOwnProperty.call(time, 'today') && (
-            <section>
+          today && (
+            <section className='time'>
               <p>
                 Time today:
                 {' '}
@@ -84,7 +60,7 @@ function Tasks() {
                 </code>
               </p>
               <p>
-                Time this month until today:
+                Time month:
                 {' '}
                 <code>
                   {month.hours <= 9 ? '0' + month.hours : month.hours}
@@ -96,18 +72,26 @@ function Tasks() {
             </section>
           )
         }
-        {
-          tasks.length > 0 && (
-            tasks.map((task) => (
-              <TaskCard
-                key={task._id}
-                task={task}
-                fetchTasks={fetchTasks}
-              />
-            ))
+        <div className='container'>
+          {
+            tasks.length > 0 && (
+              tasks.map((task) => (
+                <TaskCard
+                  key={task._id}
+                  task={task}
+                  fetchTasks={fetchTasks}
+                />
+              ))
+            )
+          }
+          {
+          tasks.length === 0 && (
+            <section>
+              <p>There are no tasks. Let's go to <Link to='/tasks/create-task'>create one</Link></p>
+            </section>
           )
         }
-      </>
+        </div>
     </main>
   )
 }

@@ -3,6 +3,7 @@ import CreateTimeTracker from "./CreateTimeTraker"
 import TimeTracker from "./TimeTracker"
 import { getUserOnStorage } from '../services/sessionStorage'
 import { requestDeleteTask, requestUpdateTask } from '../services/services'
+import '../styles/TaskCard.css'
 
 function TaskCard({ task, fetchTasks }) {
   const [view, setView] = useState(true)
@@ -68,9 +69,9 @@ function TaskCard({ task, fetchTasks }) {
   }
 
   return (
-    <section>
+    <section className='task-card'>
       <div>
-        <div style={{ display: view ? 'block' : 'none' }}>
+        <div className='task-info' style={{ display: view ? 'block' : 'none' }}>
           <div>
             <h3>{task.Name}</h3>
           </div>
@@ -85,7 +86,6 @@ function TaskCard({ task, fetchTasks }) {
         <div style={{ display: !view ? 'block' : 'none' }}>
           <input
             type='text'
-            
             value={updateTask.Name}
             onChange={(event) => {
               setUpdateTask({
@@ -118,31 +118,27 @@ function TaskCard({ task, fetchTasks }) {
         <div>
         {
           view && (
-            <>
-              <div>
-                <button
-                  type='button'
-                  name='viewFormUpdatetask'
-                  onClick={() => {
-                    setView(!view)
-                  }}
-                >
-                  update task
-                </button>
-              </div>
-              
-              <div>
-                <button
-                  type='button'
-                  name='deleteTask'
-                  onClick={() => {
-                    fetchDeleteTask()
-                  }}
-                >
-                  delete task
-                </button>
-              </div>
-            </>
+            <div className='double-elem-container'>
+              <button
+                type='button'
+                name='viewFormUpdatetask'
+                onClick={() => {
+                  setView(!view)
+                }}
+              >
+                update task
+              </button>
+              <button
+                type='button'
+                name='deleteTask'
+                className='danger'
+                onClick={() => {
+                  fetchDeleteTask()
+                }}
+              >
+                delete task
+              </button>
+            </div>
           )
         }
         {
@@ -158,19 +154,19 @@ function TaskCard({ task, fetchTasks }) {
           )
         }
         </div>
-        <CreateTimeTracker
-          fetchTasks={fetchTasks}
-          task={task}
-        />
-        {
-          task.TimeTrackers.map((timeTracker) => (
-            <TimeTracker
-              fetchTasks={fetchTasks}
-              key={timeTracker._id}
-              tracker={timeTracker}
-            />
-          ))
-        }
+          <CreateTimeTracker
+            fetchTasks={fetchTasks}
+            task={task}
+          />
+          {
+            task.TimeTrackers.map((timeTracker) => (
+              <TimeTracker
+                fetchTasks={fetchTasks}
+                key={timeTracker._id}
+                tracker={timeTracker}
+              />
+            ))
+          }
       </div>
     </section>
   )
