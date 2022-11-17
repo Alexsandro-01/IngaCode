@@ -1,11 +1,11 @@
-function Select({ name, values, tracker, setTracker }) {
+function Select({ name, values, state, setState }) {
   return (
     <div>
       <label>{name}</label>
       <select
-        value={tracker.CollaboratorId}
-        onChange={({target}) => setTracker({
-          ...tracker,
+        value={state.CollaboratorId}
+        onChange={({target}) => setState({
+          ...state,
           CollaboratorId: target.value
         })}
       >
