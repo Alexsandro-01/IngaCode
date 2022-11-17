@@ -3,6 +3,7 @@ import {useEffect, useState} from 'react'
 import {getUserOnStorage} from '../services/sessionStorage'
 import {requestCreateProject} from '../services/services'
 import '../styles/createPages.css'
+import Header from '../components/Header'
 
 function CreateProject() {
   const [project, setProject] = useState({
@@ -50,34 +51,8 @@ function CreateProject() {
 
   return (
     <main className='create-page'>
-      <header>
-        <h1>Create Project</h1>
-        <nav>
-          <ul>
-            <li>
-              <Link to='/tasks/create-task'>
-                Create task
-              </Link>
-            </li>
-            <li>
-              <Link to='/projects/create-project'>
-                Create project
-              </Link>
-            </li>
-            <li>
-              <Link to='/tasks'>
-                Tasks
-              </Link>
-            </li>
-            <li>
-              <Link to='/projects'>
-                Projects
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      </header>
-      <section>
+      <Header title='Create Project'/>
+      <section className='container'>
         <form>
           <div>
             <input

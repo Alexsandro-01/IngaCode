@@ -4,6 +4,7 @@ import {useEffect, useState, useContext} from 'react'
 import {getUserOnStorage} from '../services/sessionStorage'
 import {requestCreateTask, requestProjects} from '../services/services'
 import '../styles/createPages.css'
+import Header from '../components/Header'
 
 function CreateTask() {
   const [task, setTask] = useState({
@@ -64,34 +65,8 @@ function CreateTask() {
   const { Name, Description, ProjectId } = task;
   return (
     <main className='create-page'>
-      <header>
-        <h1>Create Task</h1>
-        <nav>
-          <ul>
-            <li>
-              <Link to='/tasks/create-task'>
-                Create task
-              </Link>
-            </li>
-            <li>
-              <Link to='/projects/create-project'>
-                Create project
-              </Link>
-            </li>
-            <li>
-              <Link to='/tasks'>
-                Tasks
-              </Link>
-            </li>
-            <li>
-              <Link to='/projects'>
-                Projects
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      </header>
-      <section>
+      <Header title='Create Task' />
+      <section className='container'>
         <form>
           <div>
             <input
