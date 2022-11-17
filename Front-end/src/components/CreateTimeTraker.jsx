@@ -191,8 +191,8 @@ function CreateTimeTracker({ task, fetchTasks }) {
         <div>
           <Select
             name='Collaborator'
-            tracker={tracker}
-            setTracker={setTracker}
+            state={tracker}
+            setState={setTracker}
             values={collaborators}
           />
         </div>

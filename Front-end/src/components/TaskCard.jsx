@@ -57,7 +57,6 @@ function TaskCard({ task, fetchTasks }) {
       setNotification({success: 'deleted', warning: ''});
       
       fetchTasks()
-      // setView(!view)
       
       setTimeout(() => {
         setNotification({ success: '', warning: '' })
