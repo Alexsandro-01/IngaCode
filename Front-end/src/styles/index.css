@@ -65,6 +65,10 @@ button {
   border-radius: 4px;
 }
 
+button:hover {
+  cursor: pointer;
+}
+
 button:disabled {
   background-color: #8efacb;
 }

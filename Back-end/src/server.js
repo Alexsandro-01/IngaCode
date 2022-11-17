@@ -1,6 +1,8 @@
 const express = require('express');
 require('express-async-errors');
 const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
+const swaggerFile = require('../swagger_output.json');
 
 const loginRoute = require('./routes/Login.routes');
 const projectRoute = require('./routes/Project.routes');
@@ -26,6 +28,8 @@ app.use('/collaborators', collaboratorsRoute);
 app.use('/projects', projectRoute);
 app.use('/tasks', taskRoute);
 app.use('/timetrackers', timeTrackerRoute);
+
+app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.use(ErrorMiddleware);
 
