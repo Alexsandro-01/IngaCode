@@ -2,13 +2,32 @@ import {Link, useNavigate} from 'react-router-dom'
 import context from '../context/AppContext'
 import {useEffect, useContext, useState} from 'react'
 import {getUserOnStorage} from '../services/sessionStorage'
-import {requestTasks, requestTime} from '../services/services'
+import {
+  requestTasks,
+  requestTime,
+  requestProjects,
+  requestCollaborators
+} from '../services/services'
 import TaskCard from '../components/TaskCard'
 import Header from '../components/Header'
 
 function Tasks() {
-  const {tasks, setTasks} = useContext(context)
+  const {
+    tasks,
+    setTasks,
+    projects,
+    setProjects
+  } = useContext(context)
+  const [tasksFiltered, setTasksFiltered] = useState(tasks)
+
+  const [filter, setFilter] = useState({
+    key: 'ProjectId',
+    id: ''
+  })
+
+  const [collaborators, setCollaborators] = useState([])
   const [time, setTime] = useState({})
+  const [view, setView] = useState(true)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -23,6 +42,7 @@ function Tasks() {
     const token = getUserOnStorage();
     
     const response = await requestTasks(token);
+    setTasksFiltered(response)
     setTasks(response)
   }
   
@@ -33,9 +53,67 @@ function Tasks() {
     setTime(response)
   }
 
+  async function fetchProjects() {
+    const token = getUserOnStorage();
+
+    const response = await requestProjects(token)
+
+    setProjects(response);
+  }
+
+  async function fetchCollaborators() {
+    const token = getUserOnStorage()
+    
+    const response = await requestCollaborators(token)
+    
+    setCollaborators(response)
+  }
+
+  function filterByProject() {
+    const filteredTasks = tasks.filter((value) => {
+      if (value[filter.key] === filter.id) {
+        return value
+      }
+    })
+
+    setTasksFiltered(filteredTasks)
+  }
+
+  function filterByCollaborator() {
+    const filteredTasks = tasks.filter((value) => {
+      let collaborator = false;
+
+      for (let index = 0; index < value.TimeTrackers.length; ++index) {
+
+        if (value.TimeTrackers[index].CollaboratorId === filter.id) {
+          collaborator = true
+        }
+      }
+      return collaborator;
+    })
+
+    setTasksFiltered(filteredTasks)
+  }
+
+  function filterTasks() {
+    if (filter.key === 'ProjectId') {
+      filterByProject()
+    }
+
+    if (filter.key === 'CollaboratorId') {
+      filterByCollaborator()
+    }
+  }
+
   useEffect(() => {
     fetchTasks()
+    fetchProjects()
+    fetchCollaborators()
   }, [])
+
+  useEffect(() => {
+    filterTasks()
+  }, [filter.id])
   
   useEffect(() => {
     fetchTime()
@@ -72,10 +150,103 @@ function Tasks() {
             </section>
           )
         }
+        <section className='filter'>
+          <div>
+            <label htmlFor="filterProject">
+
+              <input
+                type="radio"
+                name='filter'
+                id='filterProject'
+                checked={view}
+                onChange={() => {
+                  setView(true)
+                }}
+              />
+              Filter by project
+            </label>
+
+            <label htmlFor="filterCollaborator">
+              <input
+                type="radio"
+                name='filter'
+                id='filterCollaborator'
+                checked={!view}
+                onChange={() => {
+                  setView(false)
+                }}
+              />
+              Filter by collaborator
+            </label>
+          </div>
+          <div style={{ display: view ? 'flex' : 'none' }}>
+
+            <label htmlFor="selectProject">Project</label>
+
+            <select
+              value={filter.id}
+              onChange={({target}) => {
+                setFilter({
+                  key: 'ProjectId',
+                  id: target.value
+                })
+              }}
+              id="selectProject"
+            >
+              <option value=''>-- select --</option>
+              {
+                projects.length > 0 && (
+                  projects.map((value) => (
+                    <option key={value._id} value={value._id}>{value.Name}</option>
+                  ))
+                )
+              }
+            </select>
+
+          </div>
+          <div style={{ display: !view ? 'flex' : 'none' }}>
+
+            <label htmlFor='filterCollaborator'>Collaborator</label>
+
+            <select
+              value={filter.id}
+              onChange={({target}) => {
+                setFilter({
+                  key: 'CollaboratorId',
+                  id: target.value
+                })
+              }}
+              id='filterCollaborator'
+            >
+              <option value=''>-- select --</option>
+              {
+                collaborators.length > 0 && (
+                  collaborators.map((value) => (
+                    <option key={value._id} value={value._id}>{value.Name}</option>
+                  ))
+                )
+              }
+            </select>
+          </div>
+
+          <div>
+            <button
+              type='button'
+              onClick={() => {
+                fetchTasks()
+                setFilter({
+                  ...filter,
+                  id: ''
+                })
+              }}
+            >clear filters</button>
+          </div>
+
+        </section>
         <div className='container'>
           {
-            tasks.length > 0 && (
-              tasks.map((task) => (
+            tasksFiltered.length > 0 && (
+              tasksFiltered.map((task) => (
                 <TaskCard
                   key={task._id}
                   task={task}
@@ -85,9 +256,9 @@ function Tasks() {
             )
           }
           {
-          tasks.length === 0 && (
+          tasksFiltered.length === 0 && (
             <section>
-              <p>There are no tasks. Let's go to <Link to='/tasks/create-task'>create one</Link></p>
+              <p>There are no tasks.</p>
             </section>
           )
         }
