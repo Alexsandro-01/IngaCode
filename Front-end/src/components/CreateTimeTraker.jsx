@@ -120,7 +120,7 @@ function CreateTimeTracker({ task, fetchTasks }) {
 
   return (
     <>
-      <div>
+      <div className='create-time-tracker'>
         {
           notification.warning.length > 0 && (
             <p className='warning'>{notification.warning}</p>
@@ -131,10 +131,14 @@ function CreateTimeTracker({ task, fetchTasks }) {
             <p className='success'>{notification.success}</p>
           )
         }
-        <div style={{ display: view ? 'block' : 'none' }}>
+        <div
+          className='double-elem-container'
+          style={{ display: view ? 'flex' : 'none' }}
+        >
           <button
             onClick={() => setView(!view)}
           >Create time tracker</button>
+
           <button
             type='button'
             onClick={() => {
@@ -143,13 +147,21 @@ function CreateTimeTracker({ task, fetchTasks }) {
           >start new time tracker</button>
         </div>
         
-        <button
-          style={{ display: !view ? 'block' : 'none' }}
-          onClick={() => {
-            setView(!view)
-            setNotification({ success: '', warning: '' })
-          }}
-        >give up</button>
+        <div>
+          <button
+            className='warning-bg'
+            style={
+              { 
+                display: !view ? 'block' : 'none',
+                margin: 'auto'
+              }
+            }
+            onClick={() => {
+              setView(!view)
+              setNotification({ success: '', warning: '' })
+            }}
+          >give up</button>
+        </div>
       </div>
       <div style={{ display: !view ? 'block' : 'none' }}>
         <div>

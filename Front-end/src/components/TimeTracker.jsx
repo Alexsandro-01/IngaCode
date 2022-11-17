@@ -61,7 +61,7 @@ function TimeTracker({tracker, fetchTasks}) {
   }
   
   return (
-    <div>
+    <div className='time-tracker'>
       {
         notification.warning.length > 0 && (
           <p className='warning'>{notification.warning}</p>
@@ -84,24 +84,26 @@ function TimeTracker({tracker, fetchTasks}) {
           <div>
             <button
               type='button'
+              className='success'
               onClick={() => {
                 const date = new Date();
                 fetchUpdateTimeTracker({EndDate: date})
               }}
-            >finish task</button>
+            >Finish task</button>
           </div>
         )
       }
       {
         tracker.CollaboratorName && (
           <div>
-            <p>Collaborator: {tracker.CollaboratorName}</p>
+            <small>Collaborator: {tracker.CollaboratorName}</small>
           </div>
         )
       }
       <div>
         <button
           type='button'
+          className='danger'
           onClick={() => fetchDeleteTimeTracker()}
         >Delete time tracker</button>
       </div>
