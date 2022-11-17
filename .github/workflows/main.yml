@@ -5,7 +5,7 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  Avaliation:
+  Evaluator:
 
     runs-on: ubuntu-latest
 

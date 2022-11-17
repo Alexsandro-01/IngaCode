@@ -1,0 +1,534 @@
+{
+	"info": {
+		"_postman_id": "1748bd3b-e955-4915-a5dc-4a4021b86733",
+		"name": "ingacode",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12828027"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"UserName\": \"1_laerte\",\n    \"Password\": \"&men78#\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3001/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get-Collaborators",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IkJsYWRlb2ZNaXF1ZWxsYSIsImlhdCI6MTY2ODA5MjcyNX0.NFAKGh_68ytiA43CYZt3l4eTuXKtmBgoWpcN3X224_0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3001/collaborators",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"collaborators"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Project",
+			"item": [
+				{
+					"name": "Create-Project",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IkJsYWRlb2ZNaXF1ZWxsYSIsImlhdCI6MTY2ODA5MjcyNX0.NFAKGh_68ytiA43CYZt3l4eTuXKtmBgoWpcN3X224_0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name\": \"Projeto Hello World\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3001/projects/create",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"projects",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update-Project",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IkJsYWRlb2ZNaXF1ZWxsYSIsImlhdCI6MTY2ODA5MjcyNX0.NFAKGh_68ytiA43CYZt3l4eTuXKtmBgoWpcN3X224_0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name\": \"Tech News\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3001/projects/update/:{ projectId }",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"projects",
+								"update",
+								":{ projectId }"
+							],
+							"variable": [
+								{
+									"key": "{ projectId }",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete-Project",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IkJsYWRlb2ZNaXF1ZWxsYSIsImlhdCI6MTY2ODA5MjcyNX0.NFAKGh_68ytiA43CYZt3l4eTuXKtmBgoWpcN3X224_0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3001/projects/delete/{ projectId }",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"projects",
+								"delete",
+								"{ projectId }"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get-Projects",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IkJsYWRlb2ZNaXF1ZWxsYSIsImlhdCI6MTY2ODA5MjcyNX0.NFAKGh_68ytiA43CYZt3l4eTuXKtmBgoWpcN3X224_0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3001/projects/get",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"projects",
+								"get"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Task",
+			"item": [
+				{
+					"name": "Create-Task",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IkJsYWRlb2ZNaXF1ZWxsYSIsImlhdCI6MTY2ODA5MjcyNX0.NFAKGh_68ytiA43CYZt3l4eTuXKtmBgoWpcN3X224_0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name\": \"Tarefa do Hello World\",\n    \"Description\": \" Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\n    \"ProjectId\": \"b1be58f8-0238-43f4-bc13-506b6b7ec93c\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3001/tasks/create",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"tasks",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update-Task",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IkJsYWRlb2ZNaXF1ZWxsYSIsImlhdCI6MTY2ODA5MjcyNX0.NFAKGh_68ytiA43CYZt3l4eTuXKtmBgoWpcN3X224_0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name\": \"Projeto Crista de galo\",\n    \"Description\": \"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3001/tasks/update/:{ taskId }",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"tasks",
+								"update",
+								":{ taskId }"
+							],
+							"variable": [
+								{
+									"key": "{ taskId }",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get-Task",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IkJsYWRlb2ZNaXF1ZWxsYSIsImlhdCI6MTY2ODA5MjcyNX0.NFAKGh_68ytiA43CYZt3l4eTuXKtmBgoWpcN3X224_0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3001/tasks/get",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"tasks",
+								"get"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete-Task",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IkJsYWRlb2ZNaXF1ZWxsYSIsImlhdCI6MTY2ODA5MjcyNX0.NFAKGh_68ytiA43CYZt3l4eTuXKtmBgoWpcN3X224_0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3001/tasks/delete/:{ taskId }",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"tasks",
+								"delete",
+								":{ taskId }"
+							],
+							"variable": [
+								{
+									"key": "{ taskId }",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TimeTracker",
+			"item": [
+				{
+					"name": "Create-Timetracker",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IkJsYWRlb2ZNaXF1ZWxsYSIsImlhdCI6MTY2ODA5MjcyNX0.NFAKGh_68ytiA43CYZt3l4eTuXKtmBgoWpcN3X224_0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"StartDate\": \"2022-11-14T20:38:18.160Z\",\n    \"EndDate\": \"2022-11-14T21:37:26.160Z\",\n    \"TimeZoneId\": \"America/Campo_Grande\",\n    \"TaskId\": \"ffb4094c-40e6-457b-95e0-87c3e26f00b1\",\n    \"CollaboratorId\": \"2ce5d402-64fc-45f4-a735-37005af46ef5\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3001/timetrackers/create",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"timetrackers",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update-Timetracker",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IkJsYWRlb2ZNaXF1ZWxsYSIsImlhdCI6MTY2ODA5MjcyNX0.NFAKGh_68ytiA43CYZt3l4eTuXKtmBgoWpcN3X224_0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"EndDate\": \"2022-11-12T10:39:26.160Z\",\n    \"CollaboratorId\": \"8405f29d-f423-4a84-bf27-8f1eae3b324d\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3001/timetrackers/update/:{ timeTrackerId }",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"timetrackers",
+								"update",
+								":{ timeTrackerId }"
+							],
+							"variable": [
+								{
+									"key": "{ timeTrackerId }",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetTime-Timetrackers",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IkJsYWRlb2ZNaXF1ZWxsYSIsImlhdCI6MTY2ODA5MjcyNX0.NFAKGh_68ytiA43CYZt3l4eTuXKtmBgoWpcN3X224_0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3001/timetrackers/get-time",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"timetrackers",
+								"get-time"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete-Timetracker",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IkJsYWRlb2ZNaXF1ZWxsYSIsImlhdCI6MTY2ODA5MjcyNX0.NFAKGh_68ytiA43CYZt3l4eTuXKtmBgoWpcN3X224_0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3001/timetrackers/delete/:{ timetrackerId }",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"timetrackers",
+								"delete",
+								":{ timetrackerId }"
+							],
+							"variable": [
+								{
+									"key": "{ timetrackerId }",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
