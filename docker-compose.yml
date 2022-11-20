@@ -7,8 +7,6 @@ services:
     ports:
       - 3000:3000
     working_dir: /app-frontend
-    volumes:
-      - ./Front-end:/app-frontend
     depends_on:
       - backend
       
@@ -20,8 +18,6 @@ services:
     working_dir: /app-backend
     restart: always
     command: npm run dev
-    volumes:
-      - ./Back-end:/app-backend
     depends_on:
       - db
     environment:
